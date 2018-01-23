@@ -45,7 +45,7 @@ void loop() {
     digitalWrite(in1, LOW);
     digitalWrite(in2, LOW);
     Serial.println("Set both low");
-    delay(500);
+    // delay(500);
     Serial.println("Now changing to forward rotation");
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW);
@@ -54,7 +54,7 @@ void loop() {
     digitalWrite(in1, LOW);
     digitalWrite(in2, LOW);
     Serial.println("Set both low");
-    delay(500);
+    // delay(500);
 
 
 }
