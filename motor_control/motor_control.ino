@@ -22,7 +22,7 @@ void loop() {
     // int potValue = analogRead(A0); // Read potentiometer value
     // int pwmOutput = map(potValue, 0, 1023, 0 , 255); // Map the potentiometer value from 0 to 255
     Serial.println("Setting PWM signal");
-    int pwmOutput = 0;
+    int pwmOutput = 75;
     analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
     Serial.println("Sent PWM Signal");
    
@@ -37,22 +37,24 @@ void loop() {
     //     digitalWrite(in2, HIGH);
     //     delay(5000);
     // }
+    Serial.println("Now changing to backward rotation");
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
     delay(2000);
-    pwmOutput = 150;
-    analogWrite(enA, pwmOutput);
     Serial.println("Rotating backwards");
-    delay(5000);
-    pwmOutput = 0;
-    analogWrite(enA, pwmOutput);
-    delay(2000);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    Serial.println("Set both low");
+    delay(500);
+    Serial.println("Now changing to forward rotation");
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW);
-    pwmOutput = 150;
-    analogWrite(enA, pwmOutput);
     Serial.println("Rotating forwards");
-    delay(5000);
+    delay(2000);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    Serial.println("Set both low");
+    delay(500);
 
 
 }
