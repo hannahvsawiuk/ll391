@@ -2,8 +2,8 @@
     by Dejan Nedelkovski, www.HowToMechatronics.com
 */
 #define enA 9
-#define in1 6
-#define in2 7
+#define in1 12
+#define in2 11
 
 int rotDirection = 0;
 int pressed = false;
