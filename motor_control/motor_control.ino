@@ -2,8 +2,8 @@
     by Dejan Nedelkovski, www.HowToMechatronics.com
 */
 #define enA 9
-#define in1 6
-#define in2 7
+#define in1 12
+#define in2 11
 
 int rotDirection = 0;
 int pressed = false;
@@ -34,13 +34,11 @@ void setup() {
     
 }
 void loop() {
-    int potValue = analogRead(A0); // Read potentiometer value
-    int pwmOutput = map(potValue, 0, 1023, 0 , 255); // Map the potentiometer value from 0 to 255
     Serial.println("Setting PWM signal");
-    int pwmOutput = 10;
+    int pwmOutput = 50;
     analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
     Serial.println("Sent PWM Signal");
-
+    delay(5000);
     Serial.println(encoder0Pos);
    
     // // if ( rotDirection == 0) {
@@ -73,7 +71,7 @@ void loop() {
     // Serial.println("Set both low");
     // // delay(500);
 
-    if endcoder0Pos
+    Serial.println(encoder0Pos);
 
 }
 
