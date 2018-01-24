@@ -35,7 +35,7 @@ void setup() {
 }
 void loop() {
     Serial.println("Setting PWM signal");
-    int pwmOutput = 50;
+    int pwmOutput = 45;
     analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
     Serial.println("Sent PWM Signal");
     delay(5000);
