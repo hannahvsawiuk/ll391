@@ -9,11 +9,13 @@ int rotDirection = 0;
 int pressed = false;
 #define encoder0PinA  2
 #define encoder0PinB  3
-volatile unsigned int encoder0Pos = 0;
+// volatile unsigned int encoder0Pos = 0;
+volatile unsigned int encoder0Pos;
 
 void setup() {
     Serial.begin(9600);
     Serial.println("Setting up pins");
+    encoder0Pos = 0;
     pinMode(enA, OUTPUT);
     pinMode(in1, OUTPUT);
     pinMode(in2, OUTPUT);
