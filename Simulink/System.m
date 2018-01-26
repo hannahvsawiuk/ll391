@@ -178,8 +178,9 @@ BackEMF1 = 1/(Q1(SpdK)*RadPSecPerRPM); 		   	            % BackEMF Constant (V*S
 % The total moment of inertia associated with motor Q1 is J1 = J1Internal
 % J1Internal is given by just the rotational inertia of Q1, which is a given parameter
 % because the mass of the laser is negligible
-J1Internal = Q1(RotJ)/10^7;                                 % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
-J1 = J1Internal;			                                % Total Inertia for motor Q1, units: Nms^2/rad
+J1Internal = Q1(RotJ)/10^7;                                             % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
+J1ShaftQ1 = (shaftMassQ1/12)*(3*(shaftRadiusQ1)^2 + shaftLengthQ1^2);   % Inertia for Q1 shaft
+J1 = J1Internal + J1ShaftQ1;			                                % Total Inertia for motor Q1, units: Nms^2/rad
 % --------------------------------------------
 
 % B: Damping Coefficient

@@ -12,6 +12,13 @@ screenDistance = 200;        % distance away from screen -> mm
 screenMaxX = 100;            % maxmimum positive x coordinate -> mm
 screenMaxY = 100;            % maximum positive y coordinate -> mm
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       Q1 Shaft          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+shaftMassQ1 = 0.3;          % mass of Q1 shaft -> kg
+shaftRadiusQ1 = 0.01;       % radius of Q1 shaft -> m
+shaftLengthQ1 = 0.10;       % length of Q1 shaft -> m
+
 %%%%%%%%%%%%%%%%%%%%%%
 % Physical Constants %
 %%%%%%%%%%%%%%%%%%%%%%
