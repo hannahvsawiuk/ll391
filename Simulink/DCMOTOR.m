@@ -3,46 +3,47 @@
 
 MotorParam = ...
 ...             % Nominal Values
-[9              % NomV          (V)
- 12100          % NoLoadSpd     (rpm)
- 5.87           % NoLoadCurr    (mA)
- 4470           % NomSpd        (rpm)
- 0.941          % NomTorque     (mNm)
- 0.141          % NomCurr       (mA)
- 1.52           % StallTorque   (mNm)
- 0.22           % StallCurr     (A)
- 70             % MaxEff        (%)
+[12             % NomV          (V)*    % Values obtained from SPEC SHEET
+ 7200           % NoLoadSpd     (rpm)   % Values obtained from SPEC SHEET
+ 190            % NoLoadCurr    (mA)    % Values obtained from SPEC SHEET
+ 7060           % NomSpd        (rpm)   % Values obtained from SPEC SHEET
+ 12.0425662     % NomTorque     (mNm)   % Values obtained from SPEC SHEET
+ 930            % NomCurr       (mA)    % Values obtained from SPEC SHEET
+ 91.005712      % StallTorque   (mNm)   % Values obtained from SPEC SHEET
+ 6.031          % StallCurr     (A)     % Values obtained from SPEC SHEET
+ 74             % MaxEff        (%)     % Values obtained from SPEC SHEET
 ...
+%TODO
 ...             % Characteristics
- 40.9           % TermR         (Ohms)
- 1.01           % TermL         (mH)
- 6.92           % TorqueConst   (mNm/A)
- 1380           % SpdConst      (rpm/V)
- 8170           % SpdTorqueGrad (rpm/mNm)
- 20.4           % MechTimeConst (ms)
- 0.238          % RotJ          (gcm^2)
+ 5.53           % TermR         (Ohms)
+ 0.363          % TermL         (mH)
+ 10.9           % TorqueConst   (mNm/A)
+ 875            % SpdConst      (rpm/V)
+ 444            % SpdTorqueGrad (rpm/mNm)
+ 19.9           % MechTimeConst (ms)
+ 4.29           % RotJ          (gcm^2)   *
 ...
 ...             % Thermal Data
- 44.5           % ThermRhous    (K/W)
- 15             % ThermRwind    (K/W)
- 5.03           % ThermTCwind   (s)
- 245            % ThermTCmot    (s)
- 47.5           % AmbTemp       (degC)
- 85             % MaxTemp       (degC)
+ 20             % ThermRhous    (K/W)
+ 6.0            % ThermRwind    (K/W)
+ 10.2           % ThermTCwind   (s)
+ 314            % ThermTCmot    (s)
+ 27.5           % AmbTemp       (degC)
+ 125            % MaxTemp       (degC)
 ...
 ...             % Mechanical Data
- 19000          % MaxSpd        (rpm)
+ 9800           % MaxSpd        (rpm)
  0.1            % AxialPlay     (mm)
  0.012          % RadPlay       (mm)
- 0.15           % MaxAxLd       (N)
- 15             % MaxF          (N)
- 0.4            % MaxRadLd      (N)
+ 1              % MaxAxLd       (N)
+ 80             % MaxF          (N)
+ 2.8            % MaxRadLd      (N)
 ...
 ...             % Other Specifications
  1              % NoPolePair    (pure)
- 7              % NoCommSeg     (pure)
- 11             % Weight        (g)
+ 9              % NoCommSeg     (pure)
+ 54             % Weight        (g)
 ...
 ...             % Physical Dimensions
- 12             % OuterDiam     (mm)
- 21.2];         % Length        (mm)
+ 22             % OuterDiam     (mm)
+ 32];           % Length        (mm)
