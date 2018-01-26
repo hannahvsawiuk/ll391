@@ -4,9 +4,9 @@
 
 % Motor Unit Conversions
 % ----------------------
- AMAX22_6W_SB;                % Default Maxon motor
+ DCMOTOR;                % Default Maxon motor
  Q0 = MotorParam;
- AMAX12_p75W_SB;
+ DCMOTOR;
  Q1 = MotorParam;
 
 %============================================%
@@ -121,21 +121,16 @@ J0 = J0Ring + J0Internal + J0MotorQ1;			             % units: Nms^2/rad
 % B: Damping Coefficient
 % --------------------------------------------
 STGrad0 = Q0(SpdTorqueGrad)*(10^3)*RadPSecPerRPM;            % SpdTorqueGrad: rpm/mNm --> rpm/Nm --> rad/Nms = STGrad
-B0 = 2*Q0(NoLoadCurr)/10^3*Q0(TorqueK)/10^3/(Q0(NoLoadSpd)*RadPSecPerRPM); % The joint opposite Q0 has the same dynamic friction as Q0, so this
-                                                                           % expression is multiplied by 2. units: Nms/rad,
-                                                                           % NoLoadCurr mA --> A, TorqueK mNm/A --> Nm/A, NoLoadSpd rpm --> rad/s
+B0 = Q0(NoLoadCurr)/10^3*Q0(TorqueK)/10^3/(Q0(NoLoadSpd)*RadPSecPerRPM); % NoLoadCurr mA --> A, TorqueK mNm/A --> Nm/A, NoLoadSpd rpm --> rad/s
 
 % --------------------------------------------
 
-% K: Dynamic friction constant
-% --------------------------------------------
-K0 = (SpringK/10^3)/(2*pi);   				              	 % Spring constant, mNm/rev --> Nm/rad
 % --------------------------------------------
 
 % Mechanical Dynamics Vectors
 % --------------------------------------------
 Mech0n  = [1 0];                                             % Numerator: s
-Mech0d  = [J0 B0 K0];                                        % Denominator: Js^2 + Bs + K
+Mech0d  = [J0 B0];                                           % Denominator: Js^2 + Bs + K
 JntSat0 =  JntLim0*RadPerDeg;                                % Joint saturation set at the angle limit of motor Q0, deg --> rad 
 % --------------------------------------------
 
@@ -195,8 +190,6 @@ B1  = Q1(NoLoadCurr)/10^3*Q1(TorqueK)/10^3/(Q1(NoLoadSpd)*RadPSecPerRPM); % unit
 
 % --------------------------------------------
 
-% K is not included in this transfer function because the spring properties of the motor are negligible, and motor q0 is not
-% connected to the bearing that has spring like properties.
 
 % Mechanical Dynamics Vectors
 % --------------------------------------------
