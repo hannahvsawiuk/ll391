@@ -30,26 +30,6 @@ I1Stall = Q1(StallCurr);           % Max peak current
 Q1Nom   = Q1(NomV);                % Nominal voltage 
 
 %============================================%
-% 			 Amplifier Dynamics              %
-%============================================%
-% Compute transfer function of amplifier. 
-% R1, L, and C values are defined in CONSTANTS.m
-AmpR1 		= R1*10^6;		      % Mohm --> ohm
-AmpC 		= C/10^6;			  % uF --> F
-AmpL 		= L/10^3;			  % mH --> H	
-
-% The amplifier dynamics will be the same for both the motors since they use the same amplifier circuitry
-
-% Q0
-Amp0n   = [AmpC*AmpR1*R2-AmpL];                     % Numerator: C*R1*R2 - L
-Amp0d   = [AmpL*AmpC*AmpR1 AmpC*AmpR1*R2]           % Denominator: (L*C*R1)s + (C*R1*R2)
-AmpSat0 = Q0Nom;					                % Amplifier saturation set such that the maximum motor voltage is not exceeded (Nominal Voltage) 
-% Q1
-Amp1n   = [AmpC*AmpR1*R2-AmpL];                     % Numerator: C*R1*R2 - L
-Amp1d   = [AmpL*AmpC*AmpR1 AmpC*AmpR1*R2]           % Denominator: (L*C*R1)s + (C*R1*R2)
-AmpSat1 = Q1Nom;					                % Amplifier saturation set such that the maximum motor voltage is not exceeded (Nominal Voltage)
-
-%============================================%
 % 			 System Parameters               %
 %============================================%
 % Some values that will be used in the calculations of the mechanical dynamics
@@ -156,7 +136,7 @@ K0 = (SpringK/10^3)/(2*pi);   				              	 % Spring constant, mNm/rev -->
 % --------------------------------------------
 Mech0n  = [1 0];                                             % Numerator: s
 Mech0d  = [J0 B0 K0];                                        % Denominator: Js^2 + Bs + K
-JntSat0 =  Big;                                              % Motor 0 does not have an angle limit 
+JntSat0 =  JntLim0*RadPerDeg;                                % Joint saturation set at the angle limit of motor Q0, deg --> rad 
 % --------------------------------------------
 
 % Sensor Dynamics
@@ -224,7 +204,7 @@ Mech1n  = [1];                                          % Numerator: 1
 Mech1d  = [J1 B1];		                                % Denominator: Js + B
 % Transfer function: 
 % Normalized transfer function: 
-JntSat1  =  JntLim*RadPerDeg;                               % Joint saturation set at the angle limit of motor Q1, deg --> rad 
+JntSat1  =  JntLim1*RadPerDeg;                          % Joint saturation set at the angle limit of motor Q1, deg --> rad 
 % --------------------------------------------
 
 % Sensor Dynamics
@@ -242,59 +222,57 @@ StFric1 = 0;      	                                        % Static friction of 
 %============================================%
 % 		  Q0 Transfer Functions              
 %============================================%
-A0	=	tf(Amp0n,Amp0d);                                    % Amplifier
 E0	=	tf(Elec0n,Elec0d);                                  % Electrical Motor Dynamics
 M0	=	tf(Mech0n,Mech0d);                                  % Mechanical Motor Dynamics
 
 %============================================%
 % 		  Q1 Transfer Functions              %
 %============================================%
-A1	=	tf(Amp1n,Amp1d);                                    % Amplifier
 E1	=	tf(Elec1n,Elec1d);                                  % Electrical Motor Dynamics
 M1	=	tf(Mech1n,Mech1d);                                  % Mechanical Motor DynamicsA
 
-%============================================%
-% 		 Open Loop Gain Calculation          %
-%============================================%
-% Integrator
-INT = tf(1,[1 0]);
+% %============================================%
+% % 		 Open Loop Gain Calculation          %
+% %============================================%
+% % Integrator
+% INT = tf(1,[1 0]);
 
-% Q0
+% % Q0
 
-% Without static friction
-G0_1 = E0*TConst0*M0;
-T0_1 = feedback(G0_1,BackEMF0);
-GH0 = A0*T0_1*INT;
-GH0 = zpk(GH0);
-KDC0 = dcgain(GH0);
-T0 = feedback(GH0,1);
-
-% With static friction
-
-
-% T0_2 = feedback(M0,StFric0);
-% G0_1 = E0*TConst0*T0_2;
+% % Without static friction
+% G0_1 = E0*TConst0*M0;
 % T0_1 = feedback(G0_1,BackEMF0);
 % GH0 = A0*T0_1*INT;
 % GH0 = zpk(GH0);
 % KDC0 = dcgain(GH0);
 % T0 = feedback(GH0,1);
 
+% % With static friction
 
-% Q1
-G1_1 = E1*TConst1*M1; 
-T1_1 = feedback(G1_1,BackEMF1);
-% T1_1 = G1_1/(1+G1_1*BackEMF1);
-GH1 = A1*T1_1*INT;
-GH1 = zpk(GH1);
-T1 = feedback(GH1,1);
-KDC1 = dcgain(GH1);
-% disp(stepinfo(T1_1));
-% disp(stepinfo(GH1));
 
-% PID Transfer Functions
-GHPID0 = zpk(tf([1.282e08],[1 15279.1702128 748862.340426 0]));
-GHPID1 = zpk(tf([1.4146e10],[1 40450.60 2044240 0]));
+% % T0_2 = feedback(M0,StFric0);
+% % G0_1 = E0*TConst0*T0_2;
+% % T0_1 = feedback(G0_1,BackEMF0);
+% % GH0 = A0*T0_1*INT;
+% % GH0 = zpk(GH0);
+% % KDC0 = dcgain(GH0);
+% % T0 = feedback(GH0,1);
+
+
+% % Q1
+% G1_1 = E1*TConst1*M1; 
+% T1_1 = feedback(G1_1,BackEMF1);
+% % T1_1 = G1_1/(1+G1_1*BackEMF1);
+% GH1 = A1*T1_1*INT;
+% GH1 = zpk(GH1);
+% T1 = feedback(GH1,1);
+% KDC1 = dcgain(GH1);
+% % disp(stepinfo(T1_1));
+% % disp(stepinfo(GH1));
+
+% % PID Transfer Functions
+% GHPID0 = zpk(tf([1.282e08],[1 15279.1702128 748862.340426 0]));
+% GHPID1 = zpk(tf([1.4146e10],[1 40450.60 2044240 0]));
 
 
 

@@ -5,6 +5,13 @@
 % Erase entire Matlab environment
 clear all;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuration Constants %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+screenDistance = 200;        % distance away from screen -> mm
+screenMaxX = 100;            % maxmimum positive x coordinate -> mm
+screenMaxY = 100;            % maximum positive y coordinate -> mm
+
 %%%%%%%%%%%%%%%%%%%%%%
 % Physical Constants %
 %%%%%%%%%%%%%%%%%%%%%%
@@ -52,7 +59,8 @@ SpringK = 7;             % (mNm/rev)
 uSF    = 700;            % (um) = (uNm/N)
 
 % Joint Limit
-JntLim = 60;             % Q1 only (deg)
+JntLim0 = atan(screenMaxX/screenDistance);             % Q0 joint limit (deg)
+JntLim1 = atan(screenMaxY/screenDistance);             % Q1 joint limit (deg)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
