@@ -124,7 +124,7 @@ J0 = J0Ring + J0Internal + J0MotorQ1;			             % units: Nms^2/rad
 
 % B: Damping Coefficient
 % --------------------------------------------
-STGrad0 = Q0(SpdTorqueGrad)*(10^3)*RadPSecPerRPM;            % SpdTorqueGrad: rpm/mNm --> rpm/Nm --> rad/Nms = STGrad
+% STGrad0 = Q0(SpdTorqueGrad)*(10^3)*RadPSecPerRPM;            % SpdTorqueGrad: rpm/mNm --> rpm/Nm --> rad/Nms = STGrad
 B0 = Q0(NoLoadCurr)/10^3*Q0(TorqueK)/10^3/(Q0(NoLoadSpd)*RadPSecPerRPM); % NoLoadCurr mA --> A, TorqueK mNm/A --> Nm/A, NoLoadSpd rpm --> rad/s
 
 % --------------------------------------------
@@ -152,7 +152,7 @@ Sens0    =  1;                                               % Arduino handles c
 % Ns = Weight = Mass*g
 
 TotalWeight0  = mTotal0*G; 			                         % G is the gravitational acceleration given in CONSTANTS.m
-StFric0      = uSF*TotalWeight/10^6;                         % Fs = us*Ns, units: N
+StFric0      = uSF*TotalWeight0/10^6;                         % Fs = us*Ns, units: N
 % --------------------------------------------
 
 %============================================%
@@ -188,7 +188,7 @@ J1 = J1Internal + J1ShaftQ1;			                                % Total Inertia f
 
 % B: Damping Coefficient
 % --------------------------------------------
-STGrad1 = Q1(SpdTorqueGrad)*10^3*RadPSecPerRPM;             % Speed Torque Gradent, rpm/mNm --> rpm/Nm --> rad/Nms
+% STGrad1 = Q1(SpdTorqueGrad)*10^3*RadPSecPerRPM;                         % Speed Torque Gradent, rpm/mNm --> rpm/Nm --> rad/Nms
 B1  = Q1(NoLoadCurr)/10^3*Q1(TorqueK)/10^3/(Q1(NoLoadSpd)*RadPSecPerRPM); % units: Nms/rad
                                                                             % NoLoadCurr mA --> A, TorqueK mNm/A --> Nm/A, NoLoadSpd rpm --> rad/s
 
