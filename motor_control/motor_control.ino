@@ -5,64 +5,56 @@
 #define in1 12
 #define in2 11
 
-int rotDirection = 0;
-int pressed = false;
+// int rotDirection = 0;
+// int pressed = false;
 #define encoder0PinA  2
 #define encoder0PinB  3
 // volatile unsigned int encoder0Pos = 0;
 volatile unsigned int encoder0Pos;
 
+
 void setup() {
     Serial.begin(9600);
-    Serial.println("Setting up pins");
+  //  Serial.println("Setting up pins");
     encoder0Pos = 0;
     pinMode(enA, OUTPUT);
     pinMode(in1, OUTPUT);
     pinMode(in2, OUTPUT);
 
+
     pinMode(encoder0PinA, INPUT);
     pinMode(encoder0PinB, INPUT);
 
-    // encoder pin on interrupt 0 (pin 2)
+    //encoder pin on interrupt 0 (pin 2)
     attachInterrupt(0, doEncoderA, CHANGE);
 
-    // encoder pin on interrupt 1 (pin 3)
+    //encoder pin on interrupt 1 (pin 3)
     attachInterrupt(1, doEncoderB, CHANGE);
-    // Set initial rotation direction
-    Serial.println("Setting initial direction");
+    //Set initial rotation direction
+  //  Serial.println("Setting initial direction");
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
-
-    
 }
+
 void loop() {
-    Serial.println("Setting PWM signal");
-    int pwmOutput = 45;
+    int pwmOutput;
+   // Serial.println("Setting PWM signal");
+    int pwmIn = 100; // speed of 3234 RPM
+
+    pwmOutput = map(pwmIn, 0, 100, 0, 255);
     analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
-    Serial.println("Sent PWM Signal");
-    delay(5000);
-    Serial.println(encoder0Pos);
+  //  Serial.println("Sent PWM Signal");
+  //  Serial.println(encoder0Pos);
    
-    // // if ( rotDirection == 0) {
-    // //     digitalWrite(in1, HIGH);
-    // //     digitalWrite(in2, LOW);
-    // //     delay(5000);
-    // // }
-    // // else
-    // // {
-    // //     digitalWrite(in1, LOW);
-    // //     digitalWrite(in2, HIGH);
-    // //     delay(5000);
-    // // }
-    // Serial.println("Now changing to backward rotation");
-    // digitalWrite(in1, LOW);
-    // digitalWrite(in2, HIGH);
+   // Serial.println("Now changing to backward rotation");
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
     // delay(2000);
     // Serial.println("Rotating backwards");
     // digitalWrite(in1, LOW);
     // digitalWrite(in2, LOW);
     // Serial.println("Set both low");
-    // // delay(500);
+    // delay(500);
     // Serial.println("Now changing to forward rotation");
     // digitalWrite(in1, HIGH);
     // digitalWrite(in2, LOW);
@@ -71,10 +63,10 @@ void loop() {
     // digitalWrite(in1, LOW);
     // digitalWrite(in2, LOW);
     // Serial.println("Set both low");
-    // // delay(500);
+    // delay(500);
 
     Serial.println(encoder0Pos);
-
+    delay(1000);
 }
 
 
