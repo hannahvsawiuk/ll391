@@ -34,12 +34,18 @@ void setup() {
     
 }
 void loop() {
-    Serial.println("Setting PWM signal");
-    int pwmOutput = 50;
+    int pwmOutput;
+   // Serial.println("Setting PWM signal");
+    int pwmIn = 100; // speed of 3234 RPM
+
+    pwmOutput = map(pwmIn, 0, 100, 0, 255);
     analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
-    Serial.println("Sent PWM Signal");
-    delay(5000);
-    Serial.println(encoder0Pos);
+  //  Serial.println("Sent PWM Signal");
+  //  Serial.println(encoder0Pos);
+   
+   // Serial.println("Now changing to backward rotation");
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
    
     // // if ( rotDirection == 0) {
     // //     digitalWrite(in1, HIGH);
