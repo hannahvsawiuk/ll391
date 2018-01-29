@@ -38,6 +38,7 @@ Q1Nom   = Q1(NomV);                % Nominal voltage
 % --------------------------------------------
 % The values for the motors are given, so just the mass of the ring needs to be calculated.
 % Mass = volume*density
+% NEED TO CHANGE -> TODO
 rIn 	     = LinkR1/10^3;   			        % Inner radius of wrist frame, mm --> m
 rOut         = LinkR2/10^3;   			        % Outer radius of wrist frame, mm --> m
 wristDepth   = LinkD/10^3;	     		        % Depth of wrist frame, mm --> m
@@ -49,9 +50,12 @@ ringDensity  = RhoAl*10^3;				        % Density of 6061 Al, g/cm^3 --> kg/m^3: g
 mRing 	     = ringVol*ringDensity;             % Mass of ring = volume * density
 mQ0          = Q0(Weight)/10^3;                 % Mass of motor Q0
 mQ1          = Q1(Weight)/10^3;                 % Mass of motor Q1
-mTotal       = 2*mQ1 + mRing;               % Total mass of loads supported by motor Q0
+mTotal0       = 2*mQ1 + mRing;                  % Total mass of loads supported by motor Q0
                                                 % Q0 counterweight not included because it is supported by the bar
                                                 % Q1 counterweight included because it is supported by motor Q0 and it is assumed ot have the same mass as the motor
+
+mTotal1 = shaftMassQ1;                          % Q1 total mass
+
 % --------------------------------------------
 
 %============================================%
@@ -136,8 +140,7 @@ JntSat0 =  JntLim0*RadPerDeg;                                % Joint saturation 
 
 % Sensor Dynamics
 % --------------------------------------------
-Sens0    =  SensV/(SensAng*RadPerDeg);                       % Sensor dynamics, units: V/rad, SensAng (deg --> rad)
-SensSat0 =  SensV;                                           % Sensor Saturation Voltage, units: V
+Sens0    =  1;                                               % Arduino handles conversion to radian
 % --------------------------------------------
 
 % Static Friction
@@ -148,7 +151,7 @@ SensSat0 =  SensV;                                           % Sensor Saturation
 % Weight = Weight of Q0 + Weight of Q1 + Weight of ring
 % Ns = Weight = Mass*g
 
-TotalWeight  = mTotal*G; 			                         % G is the gravitational acceleration given in CONSTANTS.m
+TotalWeight0  = mTotal0*G; 			                         % G is the gravitational acceleration given in CONSTANTS.m
 StFric0      = uSF*TotalWeight/10^6;                         % Fs = us*Ns, units: N
 % --------------------------------------------
 
@@ -203,14 +206,14 @@ JntSat1  =  JntLim1*RadPerDeg;                          % Joint saturation set a
 
 % Sensor Dynamics
 % --------------------------------------------
-Sens1    =  SensV/(SensAng*RadPerDeg);                      % Sensor dynamics, units: V/rad, SensAng (deg --> rad)
-SensSat1 =  SensV;                                          % Sensor Saturation Voltage, units: V
+Sens1    =  1;                                              % Sensor dynamics, units: V/rad, SensAng (deg --> rad)
+
 % --------------------------------------------
 
 % Static Friction
 % --------------------------------------------
 % There is no static friction for motor Q! because it is in constant motion and the mass of the laser is negligible
-StFric1 = 0;      	                                        % Static friction of motor Q1, units: N
+StFric1  = uSF*mTotal1/10^6;     	                                        % Static friction of motor Q1, units: N
 % --------------------------------------------
 
 %============================================%
@@ -228,8 +231,21 @@ M1	=	tf(Mech1n,Mech1d);                                  % Mechanical Motor Dyna
 % %============================================%
 % % 		 Open Loop Gain Calculation          %
 % %============================================%
-% % Integrator
-% INT = tf(1,[1 0]);
+
+% Integrator
+INT = tf(1,[1 0]);
+
+% Q1
+T1_2 = feedback(M1,StFric1);
+G1_1 = E1*TConst1*T1_2;
+T1_1 = feedback(G1_1,BackEMF1);
+GH1 = T1_1*INT;
+GH1 = zpk(GH1);
+KDC1 = dcgain(GH1);
+OL1 = feedback(GH1,1);
+
+
+
 
 % % Q0
 

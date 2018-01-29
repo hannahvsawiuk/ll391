@@ -15,9 +15,9 @@ screenMaxY = 100;            % maximum positive y coordinate -> mm
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       Q1 Shaft          %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-shaftMassQ1 = 0.3;          % mass of Q1 shaft -> kg
-shaftRadiusQ1 = 0.01;       % radius of Q1 shaft -> m
-shaftLengthQ1 = 0.10;       % length of Q1 shaft -> m
+shaftMassQ1 = 0;          % mass of Q1 shaft -> kg
+shaftRadiusQ1 = 0.0;       % radius of Q1 shaft -> m
+shaftLengthQ1 = 0.0;       % length of Q1 shaft -> m
 
 %%%%%%%%%%%%%%%%%%%%%%
 % Physical Constants %

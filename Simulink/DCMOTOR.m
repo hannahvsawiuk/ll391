@@ -24,26 +24,26 @@ MotorParam = ...
  4.29           % RotJ          (gcm^2)   *
 ...
 ...             % Thermal Data
- 20             % ThermRhous    (K/W)
- 6.0            % ThermRwind    (K/W)
- 10.2           % ThermTCwind   (s)
- 314            % ThermTCmot    (s)
- 27.5           % AmbTemp       (degC)
- 125            % MaxTemp       (degC)
+ 0              % ThermRhous    (K/W)
+ 0              % ThermRwind    (K/W)
+ 0              % ThermTCwind   (s)
+ 0              % ThermTCmot    (s)
+ 0              % AmbTemp       (degC)
+ 0              % MaxTemp       (degC)
 ...
 ...             % Mechanical Data
- 9800           % MaxSpd        (rpm)
- 0.1            % AxialPlay     (mm)
- 0.012          % RadPlay       (mm)
+ 6468           % MaxSpd        (rpm)       % Values obtained from SPEC SHEET
+ 0              % AxialPlay     (mm)
+ 0              % RadPlay       (mm)
  1              % MaxAxLd       (N)
- 80             % MaxF          (N)
- 2.8            % MaxRadLd      (N)
+ 0              % MaxF          (N)
+ 0              % MaxRadLd      (N)
 ...
 ...             % Other Specifications
- 1              % NoPolePair    (pure)
- 9              % NoCommSeg     (pure)
- 54             % Weight        (g)
+ 0              % NoPolePair    (pure)
+ 0              % NoCommSeg     (pure)
+ 0             % Weight        (g)
 ...
 ...             % Physical Dimensions
- 22             % OuterDiam     (mm)
- 32];           % Length        (mm)
+ 30             % OuterDiam     (mm)        % Values obtained from SPEC SHEET
+ 65];           % Length        (mm)        % Values obtained from SPEC SHEET
