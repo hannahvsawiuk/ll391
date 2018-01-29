@@ -22,17 +22,17 @@ r1 = 86;                                                        % radius of circ
 xorigin1 = 0;
 yorigin1 = 0;
 prec1 = 60;                                                     % take 60 points
-x1 = linspace(r1 + xorigin1,xorigin1,prec1);
-y1 = linspace(yorigin1, r1 + yorigin1, prec1);
-x_face = horzcat( x1, -x1, -x1, x1);
-y_face = horzcat( y1, y1, -y1, -y1);
+x1 = linspace(r1 + xorigin1, xorigin1, prec1);
+y1 = sqrt(r1^2 - (x1 - xorigin1).^2) + yorigin1;
+x_face = horzcat( x1, wrev(-x1), -x1, wrev(x1) );
+y_face = horzcat( y1, wrev(y1), -y1, wrev(-y1) );
 
 % % TRAJECTORY
 % Xd = [0 x_face];
 % Yd = [0 y_face]; 
 
-Xd = x_face;
-Yd = y_face;
+Xd = [x_face];
+Yd = [y_face];
 
 % Sample Time for Set-Point Time Vector
 SampleTime = TotalTime / (length(Xd)-1);
