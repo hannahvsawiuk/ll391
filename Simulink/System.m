@@ -30,6 +30,26 @@ I1Stall = Q1(StallCurr);           % Max peak current
 Q1Nom   = Q1(NomV);                % Nominal voltage 
 
 %============================================%
+% 			 Amplifier Dynamics              %
+%============================================%
+% Compute transfer function of amplifier. 
+% R1, L, and C values are defined in CONSTANTS.m
+AmpR1 		= R1*10^6;		      % Mohm --> ohm
+AmpC 		= C/10^6;			  % uF --> F
+AmpL 		= L/10^3;			  % mH --> H	
+
+% The amplifier dynamics will be the same for both the motors since they use the same amplifier circuitry
+
+% Q0
+Amp0n   = [AmpC*AmpR1*R2-AmpL];                     % Numerator: C*R1*R2 - L
+Amp0d   = [AmpL*AmpC*AmpR1 AmpC*AmpR1*R2]           % Denominator: (L*C*R1)s + (C*R1*R2)
+AmpSat0 = Q0Nom;					                % Amplifier saturation set such that the maximum motor voltage is not exceeded (Nominal Voltage) 
+% Q1
+Amp1n   = [AmpC*AmpR1*R2-AmpL];                     % Numerator: C*R1*R2 - L
+Amp1d   = [AmpL*AmpC*AmpR1 AmpC*AmpR1*R2]           % Denominator: (L*C*R1)s + (C*R1*R2)
+AmpSat1 = Q1Nom;					                % Amplifier saturation set such that the maximum motor voltage is not exceeded (Nominal Voltage)
+
+%============================================%
 % 			 System Parameters               %
 %============================================%
 % Some values that will be used in the calculations of the mechanical dynamics
