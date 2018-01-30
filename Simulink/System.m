@@ -240,13 +240,15 @@ StFric1  = uSF*mTotal1/10^6;     	                                        % Stat
 % 		  Q0 Transfer Functions              
 %============================================%
 E0	=	tf(Elec0n,Elec0d);                                  % Electrical Motor Dynamics
-M0	=	tf(Mech0n,Mech0d);                                  % Mechanical Motor Dynamics
+M0	=	tf(Mech0n,Mech0d);  
+A0 = tf(Amp0n, Amp0d);                                % Mechanical Motor Dynamics
 
 %============================================%
 % 		  Q1 Transfer Functions              %
 %============================================%
 E1	=	tf(Elec1n,Elec1d);                                  % Electrical Motor Dynamics
-M1	=	tf(Mech1n,Mech1d);                                  % Mechanical Motor DynamicsA
+M1	=	tf(Mech1n,Mech1d); 
+A1 = tf(Amp1n, Amp1d);                                     % Mechanical Motor DynamicsA
 
 % %============================================%
 % % 		 Open Loop Gain Calculation          %
@@ -259,7 +261,7 @@ INT = tf(1,[1 0]);
 T1_2 = feedback(M1,StFric1);
 G1_1 = E1*TConst1*T1_2;
 T1_1 = feedback(G1_1,BackEMF1);
-GH1 = T1_1*INT;
+GH1 = A1*T1_1*INT;
 GH1 = zpk(GH1);
 KDC1 = dcgain(GH1);
 OL1 = feedback(GH1,1);
