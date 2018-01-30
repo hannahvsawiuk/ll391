@@ -18,7 +18,7 @@ float changeError = 0;
 float totalError = 0;
 float pidTerm = 0;
 float pidTerm_scaled = 0;// if the total gain we get is not in the PWM range we scale it down so that it's not bigger than |255|
-
+bool change = false;
 
 void setup() {
   Serial.begin(9600);
@@ -47,10 +47,12 @@ void loop(){
 
   analogWrite(pwm, pidTerm_scaled);
 
-  Serial.println("WHEEL ANGLE:");
-  Serial.print(angle);
-
-  delay(100);
+  if (change)
+  {
+    Serial.println(angle);
+    change = false;
+  }
+  //delay(100);
 }
 
 void PIDcalculation(){
@@ -102,7 +104,7 @@ void Achange() //these functions are for finding the encoder counts
     }
   }
   statep = state;
-
+  change = true;
 }
 
 void Bchange()
@@ -140,6 +142,7 @@ void Bchange()
       if (statep == 3) count--;
     }
   }
+  change = true;
   statep = state;
   
 }
