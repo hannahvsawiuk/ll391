@@ -7,7 +7,9 @@ double pwm = 9;// this is the PWM pin for the motor for how much we move it to c
 const int dir1 = 12;//these pins are to control the direction of the motor (clockwise/counter-clockwise)
 const int dir2 = 11;
 
-double setpoint = 90;//I am setting it to move through 100 degrees
+double setpoint = 90;
+double min_setpoint = 91;//I am setting it to move through 100 degrees
+double max_setpoint = 89;
 double Kp = 0.32;// you can set these constants however you like depending on trial & error
 double Ki = 0.1;
 double Kd = 0.3;
@@ -37,7 +39,12 @@ void loop(){
   
   PIDcalculation();// find PID value
   
-  if (angle < setpoint) {
+  if (min_setpoint < angle < max_setpoint)
+  {
+    digitalWrite(dir1, LOW);// Forward motion
+    digitalWrite(dir2, LOW);
+  }
+  else if (angle < setpoint) {
     digitalWrite(dir1, LOW);// Forward motion
     digitalWrite(dir2, HIGH);
   } else {
