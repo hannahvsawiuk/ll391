@@ -5,6 +5,7 @@
 #define in1 12
 #define in2 11
 #include <SimpleTimer.h>
+SimpleTimer timer;
 
 int rotDirection = 0;
 int pressed = false;
@@ -13,8 +14,10 @@ int pressed = false;
 volatile unsigned int encoder0Pos = 0;
 unsigned long start;
 unsigned long end;
-volatile unsigned rpm;
+volatile unsigned rpm=0;
 volatile bool done_rev=false;
+volatile unsigned period_milli;
+volatile unsigned accum_time;
 
 
 void setup() {
@@ -36,9 +39,6 @@ void setup() {
     Serial.println("Setting initial direction");
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
-
-    
-    
 }
 void loop() {
     int pwmOutput;
@@ -59,48 +59,26 @@ void loop() {
     }
 
     if (encoder0Pos==359){
-        end=millis();
-        done_rev=TRUE;
+      end=millis();
+      done_rev=true;
     }
     else
     {
-        done_rev=FALSE;
+      done_rev=false;
     }
 
     if (done_rev){
-
+      period_milli=end-start;
+      rpm=60*1000/period_milli;
     }
 
-   
-    // // if ( rotDirection == 0) {
-    // //     digitalWrite(in1, HIGH);
-    // //     digitalWrite(in2, LOW);
-    // //     delay(5000);
-    // // }
-    // // else
-    // // {
-    // //     digitalWrite(in1, LOW);
-    // //     digitalWrite(in2, HIGH);
-    // //     delay(5000);
-    // // }
-    // Serial.println("Now changing to backward rotation");
-    // digitalWrite(in1, LOW);
-    // digitalWrite(in2, HIGH);
-    // delay(2000);
-    // Serial.println("Rotating backwards");
-    // digitalWrite(in1, LOW);
-    // digitalWrite(in2, LOW);
-    // Serial.println("Set both low");
-    // // delay(500);
-    // Serial.println("Now changing to forward rotation");
-    // digitalWrite(in1, HIGH);
-    // digitalWrite(in2, LOW);
-    // Serial.println("Rotating forwards");
-    // delay(2000);
-    // digitalWrite(in1, LOW);
-    // digitalWrite(in2, LOW);
-    // Serial.println("Set both low");
-    // // delay(500);
+    if (millis()%200==0) {//print every 200 milliseconds
+      accum_time=millis();
+      Serial.print(accum_time);
+      Serial.print("\t");
+      Serial.print(rpm);
+      Serial.print("\n");
+    }
 }
 
 
@@ -158,6 +136,10 @@ void doEncoderB() {
     else {
       encoder0Pos = encoder0Pos - 1;          // CCW
     }
+  }
+  if (encoder0Pos==360)
+  {
+      encoder0Pos=0;
   }
 }
 
