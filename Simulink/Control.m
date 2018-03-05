@@ -49,10 +49,10 @@ P0 = 1.07e-1;
 I0 = 9.12;
 D0 = 9.820e-2;
 
-% PID1 Final Values
-P1 = 1.260e-1;
+% PID1 Final Values (V/rad)
+P1 = 1;
 I1 = 0;
-D1 = 2.000e-3;
+D1 = 0;
 
 PID0 = [P0 I0 D0];
 PID1 = [P1 I1 D1];
