@@ -1,11 +1,11 @@
-/*  Arduino DC Motor Control - PWM | H-Bridge | L298N  -  Example 01
+ /*  Arduino DC Motor Control - PWM | H-Bridge | L298N  -  Example 01
     by Dejan Nedelkovski, www.HowToMechatronics.com
 */
 #define enA 9
 #define in1 12
 #define in2 11
-#include <SimpleTimer.h>
-SimpleTimer timer;
+// #include <SimpleTimer.h>
+// SimpleTimer timer;
 
 int rotDirection = 0;
 int pressed = false;
@@ -20,7 +20,7 @@ volatile unsigned long accum_time;
 
 void setup() {
     Serial.begin(115200);
-    Serial.println("Setting up pins");
+    // Serial.println("Setting up pins");
     pinMode(enA, OUTPUT);
     pinMode(in1, OUTPUT);
     pinMode(in2, OUTPUT);
@@ -34,9 +34,9 @@ void setup() {
     // encoder pin on interrupt 1 (pin 3)
     attachInterrupt(1, doEncoderB, CHANGE);
     // Set initial rotation direction
-    Serial.println("Setting initial direction");
-    digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
+    // Serial.println("Setting initial direction");
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
 }
 void loop() {
     int pwmOutput;
@@ -50,8 +50,8 @@ void loop() {
   //  Serial.println(encoder0Pos);
    
    // Serial.println("Now changing to backward rotation");
-    digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
     
     // if (micros()%500==0){
     //   encoder0Pos=0;
