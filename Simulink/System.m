@@ -1,3 +1,12 @@
+
+% KILL  close all open figures and simulink models.
+% Close all figures.
+    % h=findall(0);
+    % delete(h(2:end));
+delete(findall(0,'Type','figure'));
+% Close all Simulink models.
+bdclose('all');
+
 %============================================%
 % 				Choose Motors                %
 %============================================%
@@ -285,7 +294,7 @@ INT = tf(1,[1 0]);
 % Q1
 % T1_1 = feedback(M1,StFric1);
 GM1 = E1*TConst1*M1;
-TM1 = feedback(GM,BackEMF1);
+TM1 = feedback(GM1,BackEMF1);
 % GH1 = A1*T1_1*INT;
 % GH1 = zpk(GH1);
 % KDC1 = dcgain(GH1);
@@ -300,12 +309,16 @@ TM1 = feedback(GM,BackEMF1);
 % plot(My1, Mx1);
 
 
-TM1_EXP = @(t) (-90801*t.^2 + 54209*t - 797.13)*BackEMF1/12;
+TM1_EXP = @(t) (-384313*t.^6+484989*t.^5-207646*t.^4+33326*t.^3-1489*t.^2+275.46*t-0.88);
 t = 0:0.001:0.3;
-plot(t,TM1_EXP(t));
+plot(t,TM1_EXP(t), 'm');
 grid on;
 hold on;
 step(TM1);
+title('Step Response of Motor Closed Loop')
+legend('Motor','Simulink Model', 'Location','southwest');
+xlabel('Response (Rad/S/V)') % x-axis label
+ylabel('Time(s)') % y-axis label
 % % Q0
 
 % % Without static friction
