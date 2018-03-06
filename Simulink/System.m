@@ -225,7 +225,8 @@ BackEMF1 = 1/(Q1(SpdK)*RadPSecPerRPM); 		   	            % BackEMF Constant (V*s
 J1Internal = Q1(RotJ)/10^7;                                             % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
 % J1ShaftQ1 = (shaftMassQ1/12)*(3*(shaftRadiusQ1)^2 + shaftLengthQ1^2);   % Inertia for Q1 shaft
 % J1 = J1Internal + J1ShaftQ1;			                                  % Total Inertia for motor Q1, units: Nms^2/rad
-J1EncoderQ1 = encoderQ1Mass/12*(3*encoderQ1Radius^3 + encoderQ1Height^2); % Inertia for Q1 encoder
+% J1EncoderQ1 = encoderQ1Mass/12*(3*encoderQ1Radius^3 + encoderQ1Height^2); % Inertia for Q1 encoder
+J1EncoderQ1 = 1/2*encoderQ1Mass*encoderQ1Radius^2;
 J1 = J1Internal + J1EncoderQ1;
 % --------------------------------------------
 
@@ -265,14 +266,14 @@ StFric1 = 0.0024; %TODO
 %============================================%
 E0	=	tf(Elec0n,Elec0d);                                  % Electrical Motor Dynamics
 M0	=	tf(Mech0n,Mech0d);  
-A0 = tf(Amp0n, Amp0d);                                % Mechanical Motor Dynamics
+% A0 = tf(Amp0n, Amp0d);                                % Mechanical Motor Dynamics
 
 %============================================%
 % 		  Q1 Transfer Functions              %
 %============================================%
 E1	=	tf(Elec1n,Elec1d);                                  % Electrical Motor Dynamics
 M1	=	tf(Mech1n,Mech1d); 
-A1 = tf(Amp1n, Amp1d);                                     % Mechanical Motor DynamicsA
+% A1 = tf(Amp1n, Amp1d);                                     % Mechanical Motor DynamicsA
 
 % %============================================%
 % % 		 Open Loop Gain Calculation          %
@@ -284,7 +285,7 @@ INT = tf(1,[1 0]);
 % Q1
 % T1_1 = feedback(M1,StFric1);
 GM = E1*TConst1*M1;
-TM = feedback(G1_1,BackEMF1);
+TM = feedback(GM,BackEMF1);
 % GH1 = A1*T1_1*INT;
 % GH1 = zpk(GH1);
 % KDC1 = dcgain(GH1);
