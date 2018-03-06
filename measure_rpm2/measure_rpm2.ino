@@ -11,12 +11,10 @@ int rotDirection = 0;
 int pressed = false;
 #define encoder0PinA  2
 #define encoder0PinB  3
-volatile unsigned int encoder0Pos = 0;
-unsigned long start;
-unsigned long end;
+volatile long unsigned encoder0Pos = 0;
 volatile unsigned rpm=0;
 volatile unsigned period_milli;
-volatile unsigned accum_time;
+volatile unsigned long accum_time;
 
 
 
@@ -37,8 +35,8 @@ void setup() {
     attachInterrupt(1, doEncoderB, CHANGE);
     // Set initial rotation direction
     Serial.println("Setting initial direction");
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
 }
 void loop() {
     int pwmOutput;
@@ -52,29 +50,34 @@ void loop() {
   //  Serial.println(encoder0Pos);
    
    // Serial.println("Now changing to backward rotation");
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
     
-    if (micros()%500==0){
-      encoder0Pos=0;
-    }
+    // if (micros()%500==0){
+    //   encoder0Pos=0;
+    // }
 
-    if (micros()%500==499){
-      rpm=encoder0Pos/360*2*1000*60;
-      Serial.println("HI");
-    }
+    // if (micros()%500==499){
+    //   rpm=encoder0Pos/360*2*1000*60;
+    //   Serial.println("HI");
+    // }
 
-    if (millis()%10==0) {//print every 10 milliseconds
-      accum_time=millis();
+    // if (millis==0) {//print every 10 milliseconds
+    //   accum_time=millis();
+    //   Serial.print(accum_time);
+    //   Serial.print("\t");
+    //   Serial.print(rpm);
+    //   Serial.print("\n");
+    // }
+
+    // accum_time=micros();
+    // Serial.print('%lu\t%d\n',accum_time,encoder0Pos);
+
+      accum_time=micros();
       Serial.print(accum_time);
       Serial.print("\t");
-      Serial.print(rpm);
+      Serial.print(encoder0Pos);
       Serial.print("\n");
-    }
-
-    //print every 200 milliseconds
-    // accum_time=micros();
-    // Serial.println(rpm,"\t",encoder0Pos);
 }
 
 
