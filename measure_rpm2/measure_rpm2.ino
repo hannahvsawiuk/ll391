@@ -19,7 +19,7 @@ volatile unsigned long accum_time;
 
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(9600);
     // Serial.println("Setting up pins");
     pinMode(enA, OUTPUT);
     pinMode(in1, OUTPUT);
@@ -73,11 +73,24 @@ void loop() {
     // accum_time=micros();
     // Serial.print('%lu\t%d\n',accum_time,encoder0Pos);
 
-      accum_time=micros();
-      Serial.print(accum_time);
-      Serial.print("\t");
-      Serial.print(encoder0Pos);
-      Serial.print("\n");
+      // accum_time=micros();
+      // Serial.print(accum_time);
+      // Serial.print("\t");
+      // Serial.print(encoder0Pos);
+      // Serial.print("\n");
+
+    
+      if (millis() % 7 == 0)
+      {
+        accum_time = millis();
+        Serial.print(accum_time);
+        Serial.print("\t");
+        Serial.print(encoder0Pos);
+        Serial.print("\n");
+      }
+
+
+
 }
 
 
