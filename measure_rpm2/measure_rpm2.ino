@@ -19,7 +19,7 @@ volatile unsigned long accum_time;
 
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(19200);
     // Serial.println("Setting up pins");
     pinMode(enA, OUTPUT);
     pinMode(in1, OUTPUT);
@@ -39,19 +39,19 @@ void setup() {
     digitalWrite(in2, HIGH);
 }
 void loop() {
-    int pwmOutput;
+    // int pwmOutput;
    // Serial.println("Setting PWM signal");
-    int pwmIn = 100; // speed of 3234 RPM 
+  //   int pwmIn = 100; // speed of 3234 RPM 
     
 
-    pwmOutput = map(pwmIn, 0, 100, 0, 255);
-    analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
-  //  Serial.println("Sent PWM Signal");
-  //  Serial.println(encoder0Pos);
+  //   pwmOutput = map(pwmIn, 0, 100, 0, 255);
+  //   analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
+  // //  Serial.println("Sent PWM Signal");
+  // //  Serial.println(encoder0Pos);
    
-   // Serial.println("Now changing to backward rotation");
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
+  //  // Serial.println("Now changing to backward rotation");
+  //   digitalWrite(in1, LOW);
+  //   digitalWrite(in2, HIGH);
     
     // if (micros()%500==0){
     //   encoder0Pos=0;
