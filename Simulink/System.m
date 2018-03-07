@@ -103,6 +103,15 @@ mTotal0       = 2*mQ1 + mRing;                  % Total mass of loads supported 
 
 mTotal1 = shaftMassQ1;                          % Q1 total mass
 
+xholderMass = 1/1000; %kg
+xholderDepth = 7/1000; 
+xholderWidth = 18.26/1000;
+xholderHeight = 10/1000;
+
+laserRadius = 3.5*10^(-3);
+laserHeight = 21*10^(-3);
+laserMass = 2*10^(-3);
+
 % --------------------------------------------
 
 
@@ -238,7 +247,9 @@ J1Internal = Q1(RotJ)/10^7;                                             % gcm^2 
 % J1 = J1Internal + J1ShaftQ1;			                                  % Total Inertia for motor Q1, units: Nms^2/rad
 % J1EncoderQ1 = encoderQ1Mass/12*(3*encoderQ1Radius^3 + encoderQ1Height^2); % Inertia for Q1 encoder
 J1EncoderQ1 = 1/2*encoderQ1Mass*encoderQ1Radius^2;
-J1 = J1Internal + J1EncoderQ1;
+J1LaserHolder = 1/2*xholderMass*(xholderDepth^2 + xholderHeight^2);
+J1Laser = 1/12*laserMass*(3*laserRadius^2 + laserHeight^2);
+J1 = J1Internal + J1EncoderQ1 + J1LaserHolder;
 % --------------------------------------------
 
 % B: Damping Coefficient
@@ -330,24 +341,50 @@ TM1 = feedback(GM1,BackEMF1);
 % ylabel('Response (Rad/S/V)'); % x-axis label
 % xlabel('Time(s)'); % y-axis label
 % hold off;
-% % Q0
-InputV1 = 12;
-MD_Log = InputV1*MD1_Log_Gain + MD1_Log_Const;
-MD_Linear = InputV1*MD1_Linear_Gain + MD1_Linear_Const;
 
-G1_Log = MD_Log*TM1*INT;
-G1_Linear = MD_Linear*TM1*INT;
-
-CL1_Log = feedback(G1_Log, 1);
-CL1_Linear = feedback(G1_Linear, 1);
-step(CL1_Log);
+% TM1_EXP = @(t) (955591*t.^6-1*10^6*t.^5+715515*t.^4-181763*t.^3+20369*t.^2-410.82*t+2.1082);
+% t = 0:0.001:0.6;
+% plot(t,TM1_EXP(t), 'm');
+% grid on;
+% hold on;
+% TM2_EXP = @(x) (48955*x.^6-107809*x.^5+91032*x.^4-35718*x.^3+5807.2*x.^2-19.845*x+1.5973);
+% x = 0:0.001:0.6;
+% plot(x,TM2_EXP(x), 'c');
+% grid on;
+% hold on;
+Data = load('TM_EXPERIMENTAL2.mat');
+plot(Data.data(:,1), Data.data(:,2), 'r');
 hold on;
-step(CL1_Linear);
-title('Step Response of Y System Closed Loop');
-legend('Log Motor Driver', 'Linear Motor Driver');
-ylabel('Response (Rad)'); % x-axis label
+step(TM1);
+hold on;
+title('Step Response of Motor Closed Loop');
+% legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
+legend('Motor Raw', 'Simulink Model', 'Location','southwest');
+ylabel('Response (Rad/S/V)'); % x-axis label
 xlabel('Time(s)'); % y-axis label
 hold off;
+
+
+% % Q0
+% InputV1 = 12;
+% MD_Log = InputV1*MD1_Log_Gain + MD1_Log_Const;
+% MD_Linear = InputV1*MD1_Linear_Gain + MD1_Linear_Const;
+
+% G1_Log = MD_Log*TM1*INT;
+% G1_Linear = MD_Linear*TM1*INT;
+
+% CL1_Log = feedback(G1_Log, 1);
+% CL1_Linear = feedback(G1_Linear, 1);
+% step(CL1_Log);
+% hold on;
+% step(CL1_Linear);
+% title('Step Response of Y System Closed Loop');
+% legend('Log Motor Driver', 'Linear Motor Driver');
+% ylabel('Response (Rad)'); % x-axis label
+% xlabel('Time(s)'); % y-axis label
+% hold off;
+
+
 
 
 % % Without static friction

@@ -34,19 +34,19 @@ void setup() {
     pinMode(in2, OUTPUT);
 
     pinMode(encoder0PinA, INPUT);
-    // pinMode(encoder0PinB, INPUT);
+    pinMode(encoder0PinB, INPUT);
 
     // encoder pin on interrupt 0 (pin 2)
     attachInterrupt(0, doEncoderA, CHANGE);
 
     // encoder pin on interrupt 1 (pin 3)
-    // attachInterrupt(1, doEncoderB, CHANGE);
+    attachInterrupt(1, doEncoderB, CHANGE);
     // Set initial rotation direction
     // Serial.println("Setting initial direction");
     // digitalWrite(in1, LOW);
     // digitalWrite(in2, HIGH);
 
-    Timer1.initialize(5000);         // initialize timer1, and set a 1/2 second period
+    Timer1.initialize(3000);         // initialize timer1, and set a 1/2 second period
     // Timer1.pwm(9, 512);                // setup pwm on pin 9, 50% duty cycle
     Timer1.attachInterrupt(timer_ISR);  // attaches callback() as a timer overflow interrupt
 }
@@ -111,7 +111,7 @@ void loop() {
 void timer_ISR()
 {
   accum0Pos += encoder0Pos;
-  speed = encoder0Pos*60;
+  speed = encoder0Pos*0.8333*60;
   encoder0Pos = 0;
   change = true;
 }
@@ -177,4 +177,9 @@ void doEncoderA() {
   encoder0Pos++;
   //Serial.println (encoder0Pos, DEC);
   // use for debugging - remember to comment out
+}
+
+void doEncoderB()
+{
+  encoder0Pos++;
 }
