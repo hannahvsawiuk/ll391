@@ -17,11 +17,11 @@ MotorParam = ...
 ...             % Characteristics
  4.361          % TermR         (Ohms)    % Values obtained through measurement
  1.205          % TermL         (mH)      % Values obtained through measurement
- 15.161         % TorqueConst   (mNm/A)   % Values obtained through measurement
- 630.169         % SpdConst      (rpm/V)   % Values obtained through measurement
+ 18.786         % TorqueConst   (mNm/A)   % Values obtained through measurement
+ 650.163           % SpdConst      (rpm/V)   % Values obtained through measurement
  0              % SpdTorqueGrad (rpm/mNm) % Values obtained from SPEC SHEET
  0              % MechTimeConst (ms)
- 0.710          % RotJ          (gcm^2)   % Values obtained through measurement
+ 35          % RotJ          (gcm^2)   % Values obtained through measurement
 ...
 ...             % Thermal Data
  0              % ThermRhous    (K/W)

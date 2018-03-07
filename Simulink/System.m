@@ -309,16 +309,21 @@ TM1 = feedback(GM1,BackEMF1);
 % plot(My1, Mx1);
 
 
-TM1_EXP = @(t) (-384313*t.^6+484989*t.^5-207646*t.^4+33326*t.^3-1489*t.^2+275.46*t-0.88);
-t = 0:0.001:0.3;
-plot(t,TM1_EXP(t), 'm');
+% TM1_EXP = @(t) (-384313*t.^6+484989*t.^5-207646*t.^4+33326*t.^3-1489*t.^2+275.46*t-0.88);
+% t = 0:0.001:0.6;
+% plot(t,TM1_EXP(t), 'm');
+% grid on;
+% hold on;
+TM2_EXP = @(x) (48955*x.^6-107809*x.^5+91032*x.^4-35718*x.^3+5807.2*x.^2-19.845*x+1.5973);
+x = 0:0.001:0.6;
+plot(x,TM2_EXP(x), 'c');
 grid on;
 hold on;
 step(TM1);
 title('Step Response of Motor Closed Loop')
-legend('Motor','Simulink Model', 'Location','southwest');
-xlabel('Response (Rad/S/V)') % x-axis label
-ylabel('Time(s)') % y-axis label
+legend('Motor', 'Simulink Model', 'Location','southwest');
+ylabel('Response (Rad/S/V)') % x-axis label
+xlabel('Time(s)') % y-axis label
 % % Q0
 
 % % Without static friction
