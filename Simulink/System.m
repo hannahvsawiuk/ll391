@@ -329,6 +329,8 @@ ylabel('Response (Rad/S/V)'); % x-axis label
 xlabel('Time(s)'); % y-axis label
 % % Q0
 
+
+
 % % Without static friction
 % G0_1 = E0*TConst0*M0;
 % T0_1 = feedback(G0_1,BackEMF0);
