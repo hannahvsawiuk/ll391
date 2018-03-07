@@ -9,8 +9,8 @@ clear all;
 % Configuration Constants %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 screenDistance = 200;        % distance away from screen -> mm
-screenMaxX = 100;            % maxmimum positive x coordinate -> mm
-screenMaxY = 100;            % maximum positive y coordinate -> mm
+screenMaxX = 140;            % maxmimum positive x coordinate -> mm
+screenMaxY = 140;            % maximum positive y coordinate -> mm
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       Q1 Shaft          %

@@ -319,11 +319,14 @@ x = 0:0.001:0.6;
 plot(x,TM2_EXP(x), 'c');
 grid on;
 hold on;
+Data = load('TM_EXPERIMENTAL.mat');
+plot(Data.data_x(:,1), Data.data_x(:,2), 'r');
 step(TM1);
-title('Step Response of Motor Closed Loop')
-legend('Motor', 'Simulink Model', 'Location','southwest');
-ylabel('Response (Rad/S/V)') % x-axis label
-xlabel('Time(s)') % y-axis label
+hold on;
+title('Step Response of Motor Closed Loop');
+legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
+ylabel('Response (Rad/S/V)'); % x-axis label
+xlabel('Time(s)'); % y-axis label
 % % Q0
 
 % % Without static friction

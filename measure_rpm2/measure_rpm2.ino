@@ -18,8 +18,9 @@ volatile unsigned long accum_time;
 
 
 
+
 void setup() {
-    Serial.begin(19200);
+    Serial.begin(115200);
     // Serial.println("Setting up pins");
     pinMode(enA, OUTPUT);
     pinMode(in1, OUTPUT);
@@ -35,8 +36,8 @@ void setup() {
     attachInterrupt(1, doEncoderB, CHANGE);
     // Set initial rotation direction
     // Serial.println("Setting initial direction");
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
+    // digitalWrite(in1, LOW);
+    // digitalWrite(in2, HIGH);
 }
 void loop() {
     // int pwmOutput;
@@ -50,8 +51,8 @@ void loop() {
   // //  Serial.println(encoder0Pos);
    
   //  // Serial.println("Now changing to backward rotation");
-  //   digitalWrite(in1, LOW);
-  //   digitalWrite(in2, HIGH);
+    // digitalWrite(in1, LOW);
+    // digitalWrite(in2, HIGH);
     
     // if (micros()%500==0){
     //   encoder0Pos=0;
@@ -78,18 +79,15 @@ void loop() {
       // Serial.print("\t");
       // Serial.print(encoder0Pos);
       // Serial.print("\n");
-
     
-      if (millis() % 7 == 0)
+      if (millis() % 8 == 0)
       {
-        accum_time = millis();
-        Serial.print(accum_time);
-        Serial.print("\t");
-        Serial.print(encoder0Pos);
+        // accum_time = millis();
+        // Serial.print(accum_time);
+        // Serial.print("\t");
+        Serial.print(encoder0Pos*0.9);
         Serial.print("\n");
       }
-
-
 
 }
 
@@ -121,6 +119,7 @@ void doEncoderA() {
   // use for debugging - remember to comment out
 }
 
+
 void doEncoderB() {
   // look for a low-to-high on channel B
   if (digitalRead(encoder0PinB) == HIGH) {
@@ -149,3 +148,18 @@ void doEncoderB() {
 }
 
 
+// void doEncoderA() {
+//   // look for a low-to-high on channel A
+//   if (digitalRead(encoder0PinA) == HIGH) {
+
+//     // check channel B to see which way encoder is turning
+//    encoder0Pos++;
+//   }
+
+//   else   // must be a high-to-low edge on channel A
+//   {
+//     encoder0Pos++;
+//   }
+//   //Serial.println (encoder0Pos, DEC);
+//   // use for debugging - remember to comment out
+// }
