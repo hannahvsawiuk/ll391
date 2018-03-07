@@ -21,6 +21,9 @@ float totalError = 0;
 float pidTerm = 0;
 float pidTerm_scaled = 0;// if the total gain we get is not in the PWM range we scale it down so that it's not bigger than |255|
 bool change = false;
+volatile unsigned long accum_time;
+
+
 
 void setup() {
   Serial.begin(9600);
@@ -39,7 +42,7 @@ void loop(){
   
   PIDcalculation();// find PID value
   
-  if (min_setpoint < angle < max_setpoint)
+  if (angle==3.14159/2)
   {
     digitalWrite(dir1, LOW);// Forward motion
     digitalWrite(dir2, LOW);
@@ -54,16 +57,21 @@ void loop(){
 
   analogWrite(pwm, pidTerm_scaled);
 
-  if (change)
-  {
-    Serial.println(angle);
-    change = false;
-  }
-  //delay(100);
+  // if (change)
+  // {
+  //   Serial.println(angle);
+  //   change = false;
+  // }
+
+  accum_time=micros();
+  Serial.print(accum_time);
+  Serial.print("%t");
+  Serial.println(angle);
+
 }
 
 void PIDcalculation(){
-  angle = (0.9 * count);//count to angle conversion
+  angle = (0.9 * count)/180;//count to angle conversion
   error = setpoint - angle;
   
   changeError = error - last_error; // derivative term

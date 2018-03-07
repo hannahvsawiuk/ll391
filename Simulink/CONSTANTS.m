@@ -40,10 +40,10 @@ Sml = 1e-6;             % General purpose small number
 TotalTime = 20;          % (s)
 
 % Amplifier
-R1  = 2.2;               % (Mohm)
-R2  = 5.9;               % (ohm)
-C   = 16;                % (uF)
-L   = 120;               % (mH)
+R1  = 1;               % (Mohm)
+R2  = 1;               % (ohm)
+C   = 1;                % (uF)
+L   = 1;               % (mH)
 
 % Sensor
 SensV   = 5;             % Min/Max sensor outpout voltage     (V)

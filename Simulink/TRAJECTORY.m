@@ -71,8 +71,8 @@ y_smile = r_smile.*sin(angle_rad) + yorigin4;
 % Xd = [x_face x_lefteye x_righteye];
 % Yd = [y_face x_lefteye x_righteye];
 
-Xd = [x_face x_lefteye x_righteye x_smile];
-Yd = [y_face y_lefteye y_righteye y_smile];
+Xd = [x_face x_righteye x_lefteye  x_smile];
+Yd = [y_face y_righteye y_lefteye  y_smile];
 
 % Sample Time for Set-Point Time Vector
 SampleTime = TotalTime / (length(Xd)-1);

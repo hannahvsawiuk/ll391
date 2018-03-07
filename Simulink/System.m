@@ -1,3 +1,12 @@
+
+% KILL  close all open figures and simulink models.
+% Close all figures.
+    % h=findall(0);
+    % delete(h(2:end));
+delete(findall(0,'Type','figure'));
+% Close all Simulink models.
+bdclose('all');
+
 %============================================%
 % 				Choose Motors                %
 %============================================%
@@ -29,6 +38,42 @@ I1Nom   = Q1(NomCurr);      	   % Max average current
 I1Stall = Q1(StallCurr);           % Max peak current
 Q1Nom   = Q1(NomV);                % Nominal voltage 
 
+% %============================================%
+% % 			 Amplifier Dynamics              %
+% %============================================%
+% % Compute transfer function of amplifier. 
+% % R1, L, and C values are defined in CONSTANTS.m
+% AmpR1 		= R1*10^6;		      % Mohm --> ohm
+% AmpC 		= C/10^6;			  % uF --> F
+% AmpL 		= L/10^3;			  % mH --> H	
+
+% % The amplifier dynamics will be the same for both the motors since they use the same amplifier circuitry
+
+% % Q0
+% Amp0n   = [AmpC*AmpR1*R2-AmpL];                     % Numerator: C*R1*R2 - L
+% Amp0d   = [AmpL*AmpC*AmpR1 AmpC*AmpR1*R2]           % Denominator: (L*C*R1)s + (C*R1*R2)
+% AmpSat0 = Q0Nom;					                % Amplifier saturation set such that the maximum motor voltage is not exceeded (Nominal Voltage) 
+% % Q1
+% Amp1n   = [AmpC*AmpR1*R2-AmpL];                     % Numerator: C*R1*R2 - L
+% Amp1d   = [AmpL*AmpC*AmpR1 AmpC*AmpR1*R2]           % Denominator: (L*C*R1)s + (C*R1*R2)
+% AmpSat1 = Q1Nom;					                % Amplifier saturation set such that the maximum motor voltage is not exceeded (Nominal Voltage)
+
+%============================================%
+%          Motor Driver Dynamics             %
+%============================================%
+
+
+% The amplifier dynamics will be the same for both the motors since they use the same amplifier circuitry
+
+MD1_Sat = 10.8;
+
+MD1_Log_Gain = 3.3049;
+MD1_Log_Const = 4.0369;
+
+
+MD1_Linear_Gain = 2.5622;
+MD1_Linear_Const = -1.3;
+
 %============================================%
 % 			 System Parameters               %
 %============================================%
@@ -57,6 +102,11 @@ mTotal0       = 2*mQ1 + mRing;                  % Total mass of loads supported 
 mTotal1 = shaftMassQ1;                          % Q1 total mass
 
 % --------------------------------------------
+
+
+encoderQ1Mass = 5.6*10^(-3); % mass in kg: experimentally obtained
+encoderQ1Radius = 24*10^(-3); % m: from datasheet
+encoderQ1Height = 1.63*10^(-3); %m: measured using calipers
 
 %============================================%
 % 		Q0 - Rotation about y-axis           %
@@ -170,7 +220,7 @@ Elec1d  = [La1 Ra1];	                                    % Denominator: sL + R
 % Torque Const & Back EMF
 % --------------------------------------------
 TConst1  = Q1(TorqueK)/10^3; 					            % Torque constant, mNm/A --> Nm/A
-BackEMF1 = 1/(Q1(SpdK)*RadPSecPerRPM); 		   	            % BackEMF Constant (V*S/rad), SpdK is the speed constant (rpm/v --> Vs/rad): rpm/V*RadPSecPerRPM = Volt*seconds/rad
+BackEMF1 = 1/(Q1(SpdK)*RadPSecPerRPM); 		   	            % BackEMF Constant (V*s/rad), SpdK is the speed constant (rpm/v --> Vs/rad): rpm/V*RadPSecPerRPM = Volt*seconds/rad
 % --------------------------------------------
 
 % Mechanical Motor Dynamics
@@ -182,8 +232,11 @@ BackEMF1 = 1/(Q1(SpdK)*RadPSecPerRPM); 		   	            % BackEMF Constant (V*S
 % J1Internal is given by just the rotational inertia of Q1, which is a given parameter
 % because the mass of the laser is negligible
 J1Internal = Q1(RotJ)/10^7;                                             % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
-J1ShaftQ1 = (shaftMassQ1/12)*(3*(shaftRadiusQ1)^2 + shaftLengthQ1^2);   % Inertia for Q1 shaft
-J1 = J1Internal + J1ShaftQ1;			                                % Total Inertia for motor Q1, units: Nms^2/rad
+% J1ShaftQ1 = (shaftMassQ1/12)*(3*(shaftRadiusQ1)^2 + shaftLengthQ1^2);   % Inertia for Q1 shaft
+% J1 = J1Internal + J1ShaftQ1;			                                  % Total Inertia for motor Q1, units: Nms^2/rad
+% J1EncoderQ1 = encoderQ1Mass/12*(3*encoderQ1Radius^3 + encoderQ1Height^2); % Inertia for Q1 encoder
+J1EncoderQ1 = 1/2*encoderQ1Mass*encoderQ1Radius^2;
+J1 = J1Internal + J1EncoderQ1;
 % --------------------------------------------
 
 % B: Damping Coefficient
@@ -213,20 +266,23 @@ Sens1    =  1;                                              % Sensor dynamics, u
 % Static Friction
 % --------------------------------------------
 % There is no static friction for motor Q! because it is in constant motion and the mass of the laser is negligible
-StFric1  = uSF*mTotal1/10^6;     	                                        % Static friction of motor Q1, units: N
+% StFric1  = uSF*mTotal1/10^6;     	                                        % Static friction of motor Q1, units: N
+StFric1 = 0.0024; %TODO
 % --------------------------------------------
 
 %============================================%
 % 		  Q0 Transfer Functions              
 %============================================%
 E0	=	tf(Elec0n,Elec0d);                                  % Electrical Motor Dynamics
-M0	=	tf(Mech0n,Mech0d);                                  % Mechanical Motor Dynamics
+M0	=	tf(Mech0n,Mech0d);  
+% A0 = tf(Amp0n, Amp0d);                                % Mechanical Motor Dynamics
 
 %============================================%
 % 		  Q1 Transfer Functions              %
 %============================================%
 E1	=	tf(Elec1n,Elec1d);                                  % Electrical Motor Dynamics
-M1	=	tf(Mech1n,Mech1d);                                  % Mechanical Motor DynamicsA
+M1	=	tf(Mech1n,Mech1d); 
+% A1 = tf(Amp1n, Amp1d);                                     % Mechanical Motor DynamicsA
 
 % %============================================%
 % % 		 Open Loop Gain Calculation          %
@@ -236,17 +292,38 @@ M1	=	tf(Mech1n,Mech1d);                                  % Mechanical Motor Dyna
 INT = tf(1,[1 0]);
 
 % Q1
-T1_2 = feedback(M1,StFric1);
-G1_1 = E1*TConst1*T1_2;
-T1_1 = feedback(G1_1,BackEMF1);
-GH1 = T1_1*INT;
-GH1 = zpk(GH1);
-KDC1 = dcgain(GH1);
-OL1 = feedback(GH1,1);
+% T1_1 = feedback(M1,StFric1);
+GM1 = E1*TConst1*M1;
+TM1 = feedback(GM1,BackEMF1);
+% GH1 = A1*T1_1*INT;
+% GH1 = zpk(GH1);
+% KDC1 = dcgain(GH1);
+% OL1 = feedback(GH1,1);
 
 
+% subplot(2,1,1);
+% step(TM1);
+% subplot(2,1,2);
+% Mx1 = linspace(0,0.001,0.3);
+% My1 = -69076*x.^2 + 4512*x;
+% plot(My1, Mx1);
 
 
+% TM1_EXP = @(t) (-384313*t.^6+484989*t.^5-207646*t.^4+33326*t.^3-1489*t.^2+275.46*t-0.88);
+% t = 0:0.001:0.6;
+% plot(t,TM1_EXP(t), 'm');
+% grid on;
+% hold on;
+TM2_EXP = @(x) (48955*x.^6-107809*x.^5+91032*x.^4-35718*x.^3+5807.2*x.^2-19.845*x+1.5973);
+x = 0:0.001:0.6;
+plot(x,TM2_EXP(x), 'c');
+grid on;
+hold on;
+step(TM1);
+title('Step Response of Motor Closed Loop')
+legend('Motor', 'Simulink Model', 'Location','southwest');
+ylabel('Response (Rad/S/V)') % x-axis label
+xlabel('Time(s)') % y-axis label
 % % Q0
 
 % % Without static friction

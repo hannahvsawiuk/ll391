@@ -6,7 +6,7 @@ MotorParam = ...
 [12             % NomV          (V)*    % Values obtained from SPEC SHEET
  7200           % NoLoadSpd     (rpm)   % Values obtained from SPEC SHEET
  190            % NoLoadCurr    (mA)    % Values obtained from SPEC SHEET
- 7060           % NomSpd        (rpm)   % Values obtained from SPEC SHEET
+ 7125           % NomSpd        (rpm)   % MEASURED RPM VALUE
  12.0425662     % NomTorque     (mNm)   % Values obtained from SPEC SHEET
  930            % NomCurr       (mA)    % Values obtained from SPEC SHEET
  91.005712      % StallTorque   (mNm)   % Values obtained from SPEC SHEET
@@ -15,13 +15,13 @@ MotorParam = ...
 ...
 %TODO
 ...             % Characteristics
- 2.258          % TermR         (Ohms)    % Values obtained through measurement
- 1.11           % TermL         (mH)      % Values obtained through measurement
- 10.9           % TorqueConst   (mNm/A)   % Values obtained through measurement
- 875            % SpdConst      (rpm/V)   % Values obtained through measurement
- 0              % SpdTorqueGrad (rpm/mNm) 
+ 4.361          % TermR         (Ohms)    % Values obtained through measurement
+ 1.205          % TermL         (mH)      % Values obtained through measurement
+ 18.786         % TorqueConst   (mNm/A)   % Values obtained through measurement
+ 650.163           % SpdConst      (rpm/V)   % Values obtained through measurement
+ 0              % SpdTorqueGrad (rpm/mNm) % Values obtained from SPEC SHEET
  0              % MechTimeConst (ms)
- 37.745         % RotJ          (gcm^2)   % Values obtained through measurement
+ 35          % RotJ          (gcm^2)   % Values obtained through measurement
 ...
 ...             % Thermal Data
  0              % ThermRhous    (K/W)
