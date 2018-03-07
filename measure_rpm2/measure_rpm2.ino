@@ -82,9 +82,9 @@ void loop() {
     
       if (millis() % 8 == 0)
       {
-        // accum_time = millis();
-        // Serial.print(accum_time);
-        // Serial.print("\t");
+        accum_time = millis();
+        Serial.print(accum_time);
+        Serial.print("\t");
         Serial.print(encoder0Pos*0.9);
         Serial.print("\n");
       }

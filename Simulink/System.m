@@ -65,7 +65,9 @@ Q1Nom   = Q1(NomV);                % Nominal voltage
 
 % The amplifier dynamics will be the same for both the motors since they use the same amplifier circuitry
 
-MD1_Sat = 10.8;
+% Volts
+MDSat1 = 10.8;
+InputSat1 = 12;
 
 MD1_Log_Gain = 3.3049;
 MD1_Log_Const = 4.0369;
@@ -314,21 +316,38 @@ TM1 = feedback(GM1,BackEMF1);
 % plot(t,TM1_EXP(t), 'm');
 % grid on;
 % hold on;
-TM2_EXP = @(x) (48955*x.^6-107809*x.^5+91032*x.^4-35718*x.^3+5807.2*x.^2-19.845*x+1.5973);
-x = 0:0.001:0.6;
-plot(x,TM2_EXP(x), 'c');
-grid on;
-hold on;
-Data = load('TM_EXPERIMENTAL.mat');
-plot(Data.data_x(:,1), Data.data_x(:,2), 'r');
-step(TM1);
-hold on;
-title('Step Response of Motor Closed Loop');
-legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
-ylabel('Response (Rad/S/V)'); % x-axis label
-xlabel('Time(s)'); % y-axis label
+% TM2_EXP = @(x) (48955*x.^6-107809*x.^5+91032*x.^4-35718*x.^3+5807.2*x.^2-19.845*x+1.5973);
+% x = 0:0.001:0.6;
+% plot(x,TM2_EXP(x), 'c');
+% grid on;
+% hold on;
+% Data = load('TM_EXPERIMENTAL.mat');
+% plot(Data.data_x(:,1), Data.data_x(:,2), 'r');
+% step(TM1);
+% hold on;
+% title('Step Response of Motor Closed Loop');
+% legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
+% ylabel('Response (Rad/S/V)'); % x-axis label
+% xlabel('Time(s)'); % y-axis label
+% hold off;
 % % Q0
+InputV1 = 12;
+MD_Log = InputV1*MD1_Log_Gain + MD1_Log_Const;
+MD_Linear = InputV1*MD1_Linear_Gain + MD1_Linear_Const;
 
+G1_Log = MD_Log*TM1*INT;
+G1_Linear = MD_Linear*TM1*INT;
+
+CL1_Log = feedback(G1_Log, 1);
+CL1_Linear = feedback(G1_Linear, 1);
+step(CL1_Log);
+hold on;
+step(CL1_Linear);
+title('Step Response of Y System Closed Loop');
+legend('Log Motor Driver', 'Linear Motor Driver');
+ylabel('Response (Rad)'); % x-axis label
+xlabel('Time(s)'); % y-axis label
+hold off;
 
 
 % % Without static friction
