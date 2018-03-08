@@ -71,7 +71,6 @@ InputSat1 = 12;
 
 
 MD1_Linear_Gain = 0.8920*12/255;
-MD1_Linear_Const = -1.3;
 
 %============================================%
 % 			 System Parameters               %
@@ -349,33 +348,36 @@ TM1 = feedback(GM1,BackEMF1);
 % plot(x,TM2_EXP(x), 'c');
 % grid on;
 % hold on;
-% Data = load('TM_EXPERIMENTAL2.mat');
-% plot(Data.data(:,1), Data.data(:,2), 'r');
+Data = load('TM_EXPERIMENTAL3.mat');
+plot(Data.data_t2(:,1), Data.data_t2(:,2), 'r');
+hold on;
+step(TM1);
+hold on;
+title('Step Response of Motor Closed Loop');
+% legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
+legend('Motor Raw', 'Simulink Model', 'Location','southwest');
+ylabel('Response (Rad/S/V)'); % x-axis label
+xlabel('Time(s)'); % y-axis label
+hold off;
+
+
+G1 = MD1_Linear_Gain*TM1;
+
+% % CL1_Linear = feedback(G1, 1);
+% Data = load('OL_EXPERIMENTAL3.mat');
+% plot(Data.data_t2_ol(:,1), Data.data_t2_ol(:,2), 'r');
+% % hold on;
 % hold on;
-% step(TM1);
-% hold on;
-% title('Step Response of Motor Closed Loop');
-% % legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
+% step(G1);
+% title('Step Response of Y System Open Loop');
+% legend('Linear Motor Driver and Motor');
 % legend('Motor Raw', 'Simulink Model', 'Location','southwest');
-% ylabel('Response (Rad/S/V)'); % x-axis label
+% ylabel('Response (Rad/s/PWM)'); % x-axis label
 % xlabel('Time(s)'); % y-axis label
 % hold off;
 
-
-G1_Linear = MD1_Linear_Gain*TM1;
-
-% CL1_Linear = feedback(G1_Linear, 1);
-Data = load('OL_EXPERIMENTAL.mat');
-plot(Data.data_ol(:,1), Data.data_ol(:,2), 'r');
-% hold on;
-hold on;
-step(G1_Linear);
-title('Step Response of Y System Open Loop');
-legend('Linear Motor Driver and Motor');
-legend('Motor Raw', 'Simulink Model', 'Location','southwest');
-ylabel('Response (Rad/s/PWM)'); % x-axis label
-xlabel('Time(s)'); % y-axis label
-hold off;
+OL1 = zpk(G1*INT);
+% Ol1 = zpk(OL1);
 
 
 
@@ -415,6 +417,7 @@ hold off;
 % GHPID0 = zpk(tf([1.282e08],[1 15279.1702128 748862.340426 0]));
 % GHPID1 = zpk(tf([1.4146e10],[1 40450.60 2044240 0]));
 
+GHPID1 = zpk(tf([96950], [1 2133 0]));
 
 
 

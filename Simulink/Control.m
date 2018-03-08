@@ -44,15 +44,15 @@
 % PID0 = [SFP0*0.1398 SFI0*6.9384 SFD0*0.0717];
 % PID1 = [SFP1*0.0900 SFI1*0 SFD1*0.0018];
 
-% PID0 Final Values
-P0 = 1.07e-1;
-I0 = 9.12;
-D0 = 9.820e-2;
+PID0 Final Values
+P0 = 0;
+I0 = 0;
+D0 = 0;
 
 % PID1 Final Values (V/rad)
-P1 = 1;
+P1 = 202.1010;
 I1 = 0;
-D1 = 0;
+D1 = 11.7;
 
 PID0 = [P0 I0 D0];
 PID1 = [P1 I1 D1];

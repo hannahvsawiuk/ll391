@@ -53,11 +53,11 @@ void setup() {
 void loop() {
     // int pwmOutput;
    // Serial.println("Setting PWM signal");
-    int pwmIn = 100; // speed of 3234 RPM 
-    int pwmOutput;
+    // int pwmIn = 100; // speed of 3234 RPM 
+    // int pwmOutput;
 
-    pwmOutput = map(pwmIn, 0, 100, 0, 255);
-    analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
+    // pwmOutput = map(pwmIn, 0, 100, 0, 255);
+    // analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
   // //  Serial.println("Sent PWM Signal");
   // //  Serial.println(encoder0Pos);
    
