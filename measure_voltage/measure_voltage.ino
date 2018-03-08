@@ -13,6 +13,7 @@ int pressed = false;
 volatile unsigned int encoder0Pos = 0;
 // int voltage = 0;
 
+
 void setup() {
     Serial.begin(9600);
     Serial.println("Setting up pins");
@@ -31,23 +32,25 @@ void loop() {
     double voltage;
     // int voltage;
 
-    int pwmOutput = 150;
+    int pwmOutput =50;
+    pwmOutput = map(pwmOutput, 0, 100, 0, 255);
+
     analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
 
 
-    for (int i = 0; i <= 255; i++)
-    {
-      pwmOutput = i;
-      analogWrite(enA, pwmOutput);
-      delay (200);
-      voltage = 0.0049*analogRead(motorIn);
-      // voltage = analogRead(motorIn);
-      delay(300);
-      Serial.print(pwmOutput);
-      Serial.print("\t");
-      Serial.println(voltage);
-      // Serial.println("\n");
-    }
+    // for (int i = 0; i <= 255; i++)
+    // {
+    //   pwmOutput = i;
+    //   analogWrite(enA, pwmOutput);
+    //   delay (200);
+    //   voltage = 0.0049*analogRead(motorIn);
+    //   // voltage = analogRead(motorIn);
+    //   delay(300);
+    //   Serial.print(pwmOutput);
+    //   Serial.print("\t");
+    //   Serial.println(voltage);
+    //   // Serial.println("\n");
+    // }
 
 }
 
