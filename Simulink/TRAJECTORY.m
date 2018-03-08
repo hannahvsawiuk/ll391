@@ -74,8 +74,10 @@
 % Xd = [x_face x_righteye x_lefteye  x_smile];
 % Yd = [y_face y_righteye y_lefteye  y_smile];
 
-Xd = [ 130 -130 130 -130 100 -100 100 -100 70 -70 70 -70 40 -40 40 -40 10 -10 10 -10];
-Yd = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
+% Yd = [ 130 -130 130 -130 100 -100 100 -100 70 -70 70 -70 40 -40 40 -40 10 -10 10 -10];
+Yd = [0 70 -70 70 -70 70 -70 70 -70 70 -70];
+Xd = [0 0 0 0 0 0 0 0 0 0 0];
+% Xd = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
 
 % Sample Time for Set-Point Time Vector
 SampleTime = TotalTime / (length(Xd)-1);

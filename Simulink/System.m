@@ -276,7 +276,8 @@ Sens1    =  1;                                              % Sensor dynamics, u
 % --------------------------------------------
 % There is no static friction for motor Q! because it is in constant motion and the mass of the laser is negligible
 % StFric1  = uSF*mTotal1/10^6;     	                                        % Static friction of motor Q1, units: N
-StFric1 = 0.0024; %TODO
+% StFric1 = TConst1*200*10^(-3); % 200 mA
+StFric1 = 0;
 % --------------------------------------------
 
 %============================================%
@@ -348,24 +349,24 @@ TM1 = feedback(GM1,BackEMF1);
 % plot(x,TM2_EXP(x), 'c');
 % grid on;
 % hold on;
-Data = load('TM_EXPERIMENTAL3.mat');
-plot(Data.data_t2(:,1), Data.data_t2(:,2), 'r');
-hold on;
-step(TM1);
-hold on;
-title('Step Response of Motor Closed Loop');
-% legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
-legend('Motor Raw', 'Simulink Model', 'Location','southwest');
-ylabel('Response (Rad/S/V)'); % x-axis label
-xlabel('Time(s)'); % y-axis label
-hold off;
+% Data = load('TM_EXPERIMENTAL2.mat');
+% plot(Data.data(:,1), Data.data(:,2), 'r');
+% hold on;
+% step(TM1);
+% hold on;
+% title('Step Response of Motor Closed Loop');
+% % legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
+% legend('Motor Raw', 'Simulink Model', 'Location','southwest');
+% ylabel('Response (Rad/S/V)'); % x-axis label
+% xlabel('Time(s)'); % y-axis label
+% hold off;
 
 
 G1 = MD1_Linear_Gain*TM1;
 
 % % CL1_Linear = feedback(G1, 1);
-% Data = load('OL_EXPERIMENTAL3.mat');
-% plot(Data.data_t2_ol(:,1), Data.data_t2_ol(:,2), 'r');
+% Data = load('OL_EXPERIMENTAL.mat');
+% plot(Data.data_ol(:,1), Data.data_ol(:,2), 'r');
 % % hold on;
 % hold on;
 % step(G1);
@@ -418,6 +419,7 @@ OL1 = zpk(G1*INT);
 % GHPID1 = zpk(tf([1.4146e10],[1 40450.60 2044240 0]));
 
 GHPID1 = zpk(tf([96950], [1 2133 0]));
+CL1 = zpk(feedback(GHPID1, 1));
 
 
 
