@@ -43,8 +43,8 @@ void setup() {
     attachInterrupt(1, doEncoderB, CHANGE);
     // Set initial rotation direction
     // Serial.println("Setting initial direction");
-    // digitalWrite(in1, LOW);
-    // digitalWrite(in2, HIGH);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
 
     Timer1.initialize(3000);         // initialize timer1, and set a 1/2 second period
     // Timer1.pwm(9, 512);                // setup pwm on pin 9, 50% duty cycle
@@ -53,11 +53,11 @@ void setup() {
 void loop() {
     // int pwmOutput;
    // Serial.println("Setting PWM signal");
-  //   int pwmIn = 100; // speed of 3234 RPM 
-    
+    int pwmIn = 100; // speed of 3234 RPM 
+    int pwmOutput;
 
-  //   pwmOutput = map(pwmIn, 0, 100, 0, 255);
-  //   analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
+    pwmOutput = map(pwmIn, 0, 100, 0, 255);
+    analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
   // //  Serial.println("Sent PWM Signal");
   // //  Serial.println(encoder0Pos);
    
