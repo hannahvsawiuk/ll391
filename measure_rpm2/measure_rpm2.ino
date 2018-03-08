@@ -6,6 +6,7 @@
 #define in2 11
 // #include <SimpleTimer.h>
 // SimpleTimer timer;
+#include <TimerOne.h>
 
 int rotDirection = 0;
 int pressed = false;
