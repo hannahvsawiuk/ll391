@@ -1,6 +1,7 @@
 #include <Math.h>
 #define encoder0PinA  2
 #define encoder0PinB  3
+#define reach_point 13
 #include <TimerOne.h>
 
 // float encoder0Pos = 0; //set the encoder0Poss of the encoder
@@ -48,9 +49,9 @@ float sample_time=0.002;
 // float Kd = 11.7; 
 // float N=100;        settles at smaller angle
 
-float Kp = 207;
-float Ki = 100;
-float Kd = 11.7; 
+float Kp = 210;
+float Ki = 40;
+float Kd = 15.1; 
 float N=100;  
 
 
@@ -77,6 +78,7 @@ void setup() {
   Serial.begin(115200);
   pinMode(encoder0PinA, INPUT);//encoder pins
   pinMode(encoder0PinB, INPUT);
+  pinMode(reach_point, OUTPUT); 
   attachInterrupt(0,doEncoderA,CHANGE);//interrupt pins for encoder
   attachInterrupt(1,doEncoderB,CHANGE); 
   
@@ -87,6 +89,7 @@ void setup() {
   Timer1.initialize(sample_time*1000000);         // initialize timer1, and set a 1/2 second period
   // Timer1.pwm(9, 512);                // setup pwm on pin 9, 50% duty cycle
   Timer1.attachInterrupt(timer_ISR);  // attaches callback() as a timer overflow interrupt
+  digitalWrite(reach_point,LOW);
 
 }
 
@@ -96,9 +99,9 @@ void loop(){
   if (change)
   {
     PIDcalculation();
-    Serial.print(pidTerm_scaled);
-    Serial.print("\t");
-    Serial.println(curr_encoder0Pos*0.9);
+    // Serial.print(pidTerm_scaled);
+    // Serial.print("\t");
+    // Serial.println(curr_encoder0Pos*0.9);
     change = false;
   }
 
@@ -107,13 +110,17 @@ void loop(){
   {
     digitalWrite(dir1, LOW);// Stop
     digitalWrite(dir2, LOW);
+    digitalWrite(reach_point,HIGH);
   }
-  else if (angle < setpoint) {
-    digitalWrite(dir1, LOW);// Forward motion
-    digitalWrite(dir2, HIGH);
+  else{
+    digitalWrite(reach_point,LOW);
+    if (angle < setpoint) {
+      digitalWrite(dir1, LOW);// Forward motion
+      digitalWrite(dir2, HIGH);
   } else {
     digitalWrite(dir1, HIGH);//Reverse motion
     digitalWrite(dir2, LOW);
+    }
   }
 
   analogWrite(pwm, pidTerm_scaled);
