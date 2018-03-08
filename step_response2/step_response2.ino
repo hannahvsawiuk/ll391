@@ -2,7 +2,11 @@
 #define encoder0PinA  2
 #define encoder0PinB  3
 #define reach_point 13
+#define overshoot 7
+#define FRAMES 20
+#define NUMLINES 3
 #include <TimerOne.h>
+
 
 // float encoder0Pos = 0; //set the encoder0Poss of the encoder
 float encoder0Pos = 0;
@@ -11,10 +15,11 @@ float last_angle=0;
 // boolean A,B;
 // byte state, statep;
 float setpoint = 3.14159/4;
+// float setpoint = waypoints[i];
 float curr_encoder0Pos;
 
-
-
+float waypoints[] = { 3.14159/4, 3.14159/8, -3.14159/16};
+int frame_count = 0;
 float pwm = 9;// this is the PWM pin for the motor for how much we move it to correct for its error
 const int dir1 = 12;//these pins are to control the direction of the motor (clockwise/encoder0Poser-clockwise)
 const int dir2 = 11;
@@ -74,11 +79,14 @@ volatile unsigned long accum_time;
 volatile unsigned long last_time;
 volatile unsigned long curr_time;
 
+int i = 0;
+
 void setup() {
   Serial.begin(115200);
   pinMode(encoder0PinA, INPUT);//encoder pins
   pinMode(encoder0PinB, INPUT);
   pinMode(reach_point, OUTPUT); 
+  pinMode(overshoot, OUTPUT);
   attachInterrupt(0,doEncoderA,CHANGE);//interrupt pins for encoder
   attachInterrupt(1,doEncoderB,CHANGE); 
   
@@ -96,35 +104,84 @@ void setup() {
 void loop(){
   // find PID value
 
-  if (change)
-  {
-    PIDcalculation();
-    // Serial.print(pidTerm_scaled);
-    // Serial.print("\t");
-    // Serial.println(curr_encoder0Pos*0.9);
-    change = false;
-  }
+  // if (change)
+  // {
+  //   PIDcalculation();
+  //   // Serial.print(pidTerm_scaled);
+  //   // Serial.print("\t");
+  //   // Serial.println(curr_encoder0Pos*0.9);
+  //   change = false;
+  // }
 
+  // if (angle==setpoint)
+  // {
+  //   digitalWrite(dir1, LOW);// Stop
+  //   digitalWrite(dir2, LOW);
+  //   digitalWrite(reach_point,HIGH);
+  //   digitalWrite(overshoot, LOW);
+  // }
+  // else{
+  //   digitalWrite(reach_point,LOW);
+  //   digitalWrite(overshoot, HIGH);
+  //   if (angle < setpoint) {
+  //     digitalWrite(dir1, LOW);// Forward motion
+  //     digitalWrite(dir2, HIGH);
+  // } else {
+  //   digitalWrite(dir1, HIGH);//Reverse motion
+  //   digitalWrite(dir2, LOW);
+  //   }
+  // }
 
-  if (angle==setpoint)
-  {
-    digitalWrite(dir1, LOW);// Stop
-    digitalWrite(dir2, LOW);
-    digitalWrite(reach_point,HIGH);
-  }
-  else{
-    digitalWrite(reach_point,LOW);
-    if (angle < setpoint) {
-      digitalWrite(dir1, LOW);// Forward motion
-      digitalWrite(dir2, HIGH);
-  } else {
-    digitalWrite(dir1, HIGH);//Reverse motion
-    digitalWrite(dir2, LOW);
-    }
-  }
+  // analogWrite(pwm, pidTerm_scaled);
 
-  analogWrite(pwm, pidTerm_scaled);
+//  if (change)
+//   {
+//     PIDcalculation();
+//     // Serial.print(pidTerm_scaled);
+//     // Serial.print("\t");
+//     // Serial.println(curr_encoder0Pos*0.9);
+//     change = false;
+//   }
 
+//   if (angle==setpoint)
+//   {
+//     digitalWrite(dir1, LOW);// Stop
+//     digitalWrite(dir2, LOW);
+//     digitalWrite(reach_point,HIGH);
+//     digitalWrite(overshoot, LOW);
+//     if (frame_count > FRAMES)
+//     {
+//       frame_count++;
+//       setpoint = -setpoint;
+//     }
+//     else
+//     {
+//       frame_count = 0;
+//       if (i < NUMLINES)
+//       {
+//         i++;
+//         setpoint = waypoints[i];
+//       }
+//       else
+//       {
+//         // stay idle
+//       }
+//     }
+//   }
+
+//   else{
+//     digitalWrite(reach_point,LOW);
+//     digitalWrite(overshoot, HIGH);
+//     if (angle < setpoint) {
+//       digitalWrite(dir1, LOW);// Forward motion
+//       digitalWrite(dir2, HIGH);
+//   } else {
+//     digitalWrite(dir1, HIGH);//Reverse motion
+//     digitalWrite(dir2, LOW);
+//     }
+//   }
+
+//   analogWrite(pwm, pidTerm_scaled);
 
 }
 
