@@ -17,7 +17,8 @@ float angle = 0;//set the angles
 float last_angle=0;
 // boolean A,B;
 // byte state, statep;
-float setpoint = 0.79;
+float desired = 0.79;
+float setpoint = desired;
 // float setpoint = waypoints[i];
 float curr_encoder0Pos;
 
@@ -31,20 +32,20 @@ const int dir2 = 12;
 // float Kp = 0.32;// you can set these constants however you like depending on trial & error
 // float Ki = 0.1;
 // float Kd = 0.3;
-float sample_time=0.002;
+float sample_time=0.003;
 
 // float Kp = 200;
-// float Ki = 40;
+// float Ki = 35;
 // float Kd = 18; 
-// float N=100;         //vibrates
+// float N=80;         //vibrates
 
 // volatile int accum0Pos = 0;
 // volatile int speed = 0;      
 
 // float Kp = 206;
-// float Ki = 40;
+// float Ki = 15;
 // float Kd = 20; 
-// float N=100;          reaches point but too slow
+// float N=100;         // reaches point but too slow
 
 // float Kp = 207;
 // float Ki = 40;
@@ -56,10 +57,32 @@ float sample_time=0.002;
 // float Kd = 11.7; 
 // float N=100;        settles at smaller angle
 
-// float Kp = 16*10.3;
+// float Kp = 205.2;
 // float Ki = 0;
 // float Kd = 0.983*12; 
-// float N=200;  
+// float N=95;  
+
+//  float Kp = 207;
+//  float Ki = 20;
+//  float Kd = 20; 
+//  float N=100;  
+
+
+// float Kp = 205;
+// float Ki = 30;
+// float Kd = 15.1; 
+// float N=100;         //vibrates / WORKS
+
+float Kp = 207.5;
+float Ki = 30;
+float Kd = 16.5; 
+float N=100;         //vibrates / WORKS
+
+
+// float Kp = 150;
+// float Ki = 15;
+// float Kd = 15.1; 
+// float N=100;         //vibrates
 
 
 
@@ -80,6 +103,7 @@ float por_term=0;
 volatile unsigned long accum_time;
 volatile unsigned long last_time;
 volatile unsigned long curr_time;
+volatile int speed = 0;
 
 int i = 0;
 
@@ -119,107 +143,40 @@ void loop(){
   if (change)
   {
     PIDcalculation();
-    //  Serial.print(pidTerm_scaled);
-    //  Serial.print("\t");
-    //  Serial.println(curr_encoder0Pos*0.9);
-    change = false;
+        Serial.println(speed);
+        change = false;
   }
 
-  if (int(angle*100)/100==setpoint)
+  if (abs(angle - setpoint) <= 0.0174533)
   {
-    digitalWrite(dir1, LOW);// Stop
-    digitalWrite(dir2, LOW);
-    digitalWrite(reach_point,HIGH);
-    digitalWrite(large_overshoot, LOW);
-    digitalWrite(small_overshoot, LOW);
-    digitalWrite(small_error, LOW);
-    digitalWrite(small_undershoot, LOW);
-    digitalWrite(large_undershoot, LOW);
-    setpoint=-setpoint;
-    Serial.println("A");
+    last_int_term=0;
+    int_term=0;
+    last_deriv_term=0;
+    last_error = angle -setpoint;
   }
   else{
     digitalWrite(reach_point,LOW);
     if (angle < setpoint) {
-        
+    
       digitalWrite(dir1, LOW);// Forward motion
       digitalWrite(dir2, HIGH);
-      digitalWrite(large_overshoot, LOW);
-      digitalWrite(small_overshoot, LOW);
-      if (error<0.01){   // 0.5729578 degrees
-
-        digitalWrite(small_error, HIGH);
-        digitalWrite(small_undershoot, LOW);
-        digitalWrite(large_undershoot, LOW);
-      }
-
-      else if (error<0.05) //2.864789 degrees
-      {
-        digitalWrite(large_undershoot, LOW);
-        digitalWrite(small_undershoot, HIGH);
-        digitalWrite(small_error, HIGH);
-
-      }
-
-      else if (error<0.1) { //5.72958 degrees
-
-        digitalWrite(large_overshoot, LOW);
-        digitalWrite(small_overshoot, HIGH);
-        digitalWrite(small_error, LOW);
-      }
      
-      else { //5.72958 degrees
-
-        digitalWrite(large_overshoot, HIGH);
-        digitalWrite(small_overshoot, LOW);
-        digitalWrite(small_error, LOW);
       }
 
-    } 
       else {
       digitalWrite(dir1, HIGH);//Reverse motion
-      digitalWrite(dir2, LOW);
-
-      digitalWrite(large_undershoot, LOW);
-      digitalWrite(small_undershoot, LOW);
-      if (abs(error)<0.01){   // 0.5729578 degrees
-
-        digitalWrite(small_error, HIGH);
-        digitalWrite(small_overshoot, LOW);
-        digitalWrite(large_overshoot, LOW);
-      }
-
-      else if (abs(error)<0.05) //2.864789 degrees
-      {
-        digitalWrite(large_overshoot, LOW);
-        digitalWrite(small_overshoot, HIGH);
-        digitalWrite(small_error, HIGH);
-
-      }
-
-      else if (abs(error)<0.1) { //5.72958 degrees
-
-        digitalWrite(large_overshoot, LOW);
-        digitalWrite(small_overshoot, HIGH);
-        digitalWrite(small_error, LOW);
-      }
-     
-      else { // larger than 5.72958 degrees
-
-        digitalWrite(large_overshoot, HIGH);
-        digitalWrite(small_overshoot, LOW);
-        digitalWrite(small_error, LOW);
-      }
-    }
+      digitalWrite(dir2, LOW);}
   }
 
   analogWrite(pwm, pidTerm_scaled);
-
 }
 
 void timer_ISR()
 {
   curr_encoder0Pos = (encoder0Pos);   //convert to radians
+  change = true;
+  speed = encoder0Pos*0.8333*60;
+  encoder0Pos = 0;
   change = true;
 }
 
