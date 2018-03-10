@@ -2,7 +2,7 @@
 #define encoder0PinA  2
 #define encoder0PinB  3
 #define reach_point 13
-#define overshoot 7
+#define overshoot 5
 #define FRAMES 20
 #define NUMLINES 3
 #include <TimerOne.h>
@@ -14,15 +14,15 @@ float angle = 0;//set the angles
 float last_angle=0;
 // boolean A,B;
 // byte state, statep;
-float setpoint = 3.14159/4;
-// float setpoint = waypoints[i];
+// float setpoint = 3.14159/4;
+
 float curr_encoder0Pos;
 
 float waypoints[] = { 3.14159/4, 3.14159/8, -3.14159/16};
 int frame_count = 0;
 float pwm = 9;// this is the PWM pin for the motor for how much we move it to correct for its error
-const int dir1 = 12;//these pins are to control the direction of the motor (clockwise/encoder0Poser-clockwise)
-const int dir2 = 11;
+const int dir1 = 11;//these pins are to control the direction of the motor (clockwise/encoder0Poser-clockwise)
+const int dir2 = 12;
 
 // float min_setpoint = 85;//I am setting it to move through 100 degrees
 // float max_setpoint = 95;
@@ -75,11 +75,15 @@ float last_deriv_term=0;
 float deriv_term=0;
 float por_term=0;
 
+
 volatile unsigned long accum_time;
 volatile unsigned long last_time;
 volatile unsigned long curr_time;
 
 int i = 0;
+// float setpoint = waypoints[i];
+float setpoint = 0.79;
+
 
 void setup() {
   Serial.begin(115200);
@@ -103,37 +107,6 @@ void setup() {
 
 void loop(){
   // find PID value
-
-  // if (change)
-  // {
-  //   PIDcalculation();
-  //   // Serial.print(pidTerm_scaled);
-  //   // Serial.print("\t");
-  //   // Serial.println(curr_encoder0Pos*0.9);
-  //   change = false;
-  // }
-
-  // if (angle==setpoint)
-  // {
-  //   digitalWrite(dir1, LOW);// Stop
-  //   digitalWrite(dir2, LOW);
-  //   digitalWrite(reach_point,HIGH);
-  //   digitalWrite(overshoot, LOW);
-  // }
-  // else{
-  //   digitalWrite(reach_point,LOW);
-  //   digitalWrite(overshoot, HIGH);
-  //   if (angle < setpoint) {
-  //     digitalWrite(dir1, LOW);// Forward motion
-  //     digitalWrite(dir2, HIGH);
-  // } else {
-  //   digitalWrite(dir1, HIGH);//Reverse motion
-  //   digitalWrite(dir2, LOW);
-  //   }
-  // }
-
-  // analogWrite(pwm, pidTerm_scaled);
-
 //  if (change)
 //   {
 //     PIDcalculation();
@@ -182,6 +155,38 @@ void loop(){
 //   }
 
 //   analogWrite(pwm, pidTerm_scaled);
+
+ if (change)
+  {
+    PIDcalculation();
+    Serial.print(pidTerm_scaled);
+    Serial.print("\t");
+    Serial.println(curr_encoder0Pos*0.9);
+    change = false;
+  }
+
+  if (angle==setpoint)
+  {
+    digitalWrite(dir1, LOW);// Stop
+    digitalWrite(dir2, LOW);
+    digitalWrite(reach_point,HIGH);
+    digitalWrite(overshoot, LOW);
+    setpoint = -setpoint;
+  }
+
+  else{
+    digitalWrite(reach_point,LOW);
+    digitalWrite(overshoot, HIGH);
+    if (angle < setpoint) {
+      digitalWrite(dir1, LOW);// Forward motion
+      digitalWrite(dir2, HIGH);
+    } else {
+    digitalWrite(dir1, HIGH);//Reverse motion
+    digitalWrite(dir2, LOW);
+    }
+  }
+
+  analogWrite(pwm, pidTerm_scaled);
 
 }
 
