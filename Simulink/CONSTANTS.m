@@ -9,8 +9,8 @@ clear all;
 % Configuration Constants %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 screenDistance = 200;        % distance away from screen -> mm
-screenMaxX = 140;            % maxmimum positive x coordinate -> mm
-screenMaxY = 140;            % maximum positive y coordinate -> mm
+screenMaxX = 50;            % maxmimum positive x coordinate -> mm
+screenMaxY = 50;            % maximum positive y coordinate -> mm
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       Q1 Shaft          %
@@ -50,7 +50,7 @@ SensV   = 5;             % Min/Max sensor outpout voltage     (V)
 SensAng = 180;           % Min/Max sensor angle               (deg)
 
 % Geometry
-Height   = 200;          % Height above build plate           (mm)
+Height   = screenDistance;          % Height above build plate           (mm)
 LinkR1   = 16;           % Inner radius of wrist frame        (mm)
 LinkR2   = 22;           % Outer radius of wrist frame        (mm)
 LinkD    = 5;            % Depth of wrist frame               (mm)
@@ -67,8 +67,8 @@ uSF    = 700;            % (um) = (uNm/N)
 
 % Joint Limit
 JntLim0 = atan(screenMaxX/screenDistance);             % Q0 joint limit (deg)
-JntLim1 = atan(screenMaxY/screenDistance);             % Q1 joint limit (deg)
-
+% JntLim1 = atan(screenMaxY/screenDistance);             % Q1 joint limit (deg)
+JntLim1 = 90;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Indices into MotorParam Vector for Maxon motors %
