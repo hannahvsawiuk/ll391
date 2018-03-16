@@ -2,7 +2,7 @@
     by Dejan Nedelkovski, www.HowToMechatronics.com
 */
 
-                                                                    
+ #include <TimerOne.h>                                                                   
 #define enA 9
 #define in1 12
 #define in2 11

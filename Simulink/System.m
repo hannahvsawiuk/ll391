@@ -364,18 +364,18 @@ TM1 = feedback(GM1,BackEMF1);
 
 G1 = MD1_Linear_Gain*TM1;
 
-% CL1_Linear = feedback(G1, 1);
-Data = load('OL_EXPERIMENTAL.mat');
-plot(Data.data_ol(:,1), Data.data_ol(:,2), 'r');
+% % CL1_Linear = feedback(G1, 1);
+% Data = load('OL_EXPERIMENTAL.mat');
+% plot(Data.data_ol(:,1), Data.data_ol(:,2), 'r');
+% % hold on;
 % hold on;
-hold on;
-step(G1);
-title('Step Response of Y System Open Loop');
-legend('Linear Motor Driver and Motor');
-legend('Motor Raw', 'Simulink Model', 'Location','southwest');
-ylabel('Response (Rad/s/PWM)'); % x-axis label
-xlabel('Time(s)'); % y-axis label
-hold off;
+% step(G1);
+% title('Step Response of Y System Open Loop');
+% legend('Linear Motor Driver and Motor');
+% legend('Motor Raw', 'Simulink Model', 'Location','southwest');
+% ylabel('Response (Rad/s/PWM)'); % x-axis label
+% xlabel('Time(s)'); % y-axis label
+% hold off;
 
 OL1 = zpk(G1*INT);
 % Ol1 = zpk(OL1);
@@ -421,6 +421,21 @@ OL1 = zpk(G1*INT);
 GHPID1 = zpk(tf([96950], [1 2133 0]));
 CL1 = zpk(feedback(GHPID1, 1));
 
+% CL1_Linear = feedback(G1, 1);
+Data = load('CL_EXPERIMENTAL.mat');
+plot(Data.data_cl(:,1), Data.data_cl(:,2), 'r');
+% hold on;
+hold on;
+step(CL1);
+title('Step Response of Controlled Closed Loop');
+% legend('Linear Motor Driver and Motor');
+legend('Motor Raw', 'Simulink Model', 'Location','southwest');
+ylabel('Response (Rad/Rad)'); % x-axis label
+xlabel('Time(s)'); % y-axis label
+hold off;
+
+OL1 = zpk(G1*INT);
+% Ol1 = zpk(OL1);
 
 
 
