@@ -3,8 +3,8 @@
 */
 
 #define enA 9
-#define in1 12
-#define in2 11
+#define in1 35
+#define in2 33
 
 int rotDirection = 0;
 int pressed = false;
@@ -19,14 +19,14 @@ void setup() {
     pinMode(in1, OUTPUT);
     pinMode(in2, OUTPUT);
 
-    pinMode(encoder0PinA, INPUT);
-    pinMode(encoder0PinB, INPUT);
+    // pinMode(encoder0PinA, INPUT);
+    // pinMode(encoder0PinB, INPUT);
 
     // encoder pin on interrupt 0 (pin 2)
-    attachInterrupt(0, doEncoderA, CHANGE);
+    // attachInterrupt(0, doEncoderA, CHANGE);
 
     // encoder pin on interrupt 1 (pin 3)
-    attachInterrupt(1, doEncoderB, CHANGE);
+    // attachInterrupt(1, doEncoderB, CHANGE);
     // Set initial rotation direction
     Serial.println("Setting initial direction");
     digitalWrite(in1, LOW);
@@ -36,7 +36,7 @@ void setup() {
 void loop() {
     int pwmOutput;
    // Serial.println("Setting PWM signal");
-    int pwmIn = 45; // speed of 3234 RPM
+    int pwmIn = 100; // speed of 3234 RPM
 
     pwmOutput = map(pwmIn, 0, 100, 0, 255);
     analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
@@ -46,7 +46,17 @@ void loop() {
    // Serial.println("Now changing to backward rotation");
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
-   
+
+    delay(3000);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    delay(200);
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    delay(3000);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    delay(200);
     // // if ( rotDirection == 0) {
     // //     digitalWrite(in1, HIGH);
     // //     digitalWrite(in2, LOW);
@@ -77,8 +87,8 @@ void loop() {
     // Serial.println("Set both low");
     // // delay(500);
 
-    Serial.println(encoder0Pos);
-    delay(200);
+    // Serial.println(encoder0Pos);
+    // delay(200);
 
 }
 
