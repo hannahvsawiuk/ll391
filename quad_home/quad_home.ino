@@ -16,7 +16,7 @@
 #define index_in 31
 #define index_out 30
 
-#define reachPoint 36
+#define reachPoint 13
 #define largeUndershoot 3
 #define smallUndershoot 10
 #define smallError 8
@@ -40,12 +40,20 @@ float angle = 0;//set the angles
 float lastAngle=0;
 // boolean A,B;
 // byte state, statep;
-float desired = 0.79;
+float desired = 1.58;
+
 float setpoint = desired;
 // float setpoint = waypoints[i];
 // float currEncoder0Pos;
 
-float waypoints[] = { 3.14159/4, 3.14159/8, -3.14159/16};
+float waypoints[] = { 3.14159/8, 2*3.14159/8, 3*3.14159/8, 4*3.14159/8, 
+                      3*3.14159/8, 2*3.14159/8, 3.14159/8,
+                      0, -3.14159/8, 2*-3.14159/8, 3*-3.14159/8, 4*-3.14159/8,
+                      3*-3.14159/8, 2*-3.14159/8, -3.14159/8, 0};
+
+                      
+
+
 
 // float min_setpoint = 85;//I am setting it to move through 100 degrees
 // float max_setpoint = 95;
@@ -99,10 +107,28 @@ float sampleTime=0.002;
 // float N=100;         //vibrates / WORKS
 
 
-float Kp = 100;
-float Ki = 0;
-float Kd = 30; 
-float N=100;   
+// float Kp = 155;
+// float Ki = 0;
+// float Kd = 30; 
+// float N=100;   
+
+// float Kp = 210;
+// float Ki = 0;    //works for 45 degrees
+// float Kd =22; 
+// float N=100;  
+
+
+
+float Kp = 205;
+float Ki = 0;    
+float Kd =22;
+float N=100;  
+
+// float Kp = 209;
+// float Ki = 0;
+// float Kd =21.8; 
+// float N=100;  
+ 
 
 
 // float Kp = 150;
@@ -132,6 +158,7 @@ float porTerm = 0;
 
 int i = 0;
 bool homing = false;
+// int i;
 void setup() {
     
     Serial.begin(115200);
@@ -190,7 +217,7 @@ void setup() {
     digitalWrite(dir1, LOW);// Stop
     digitalWrite(dir2, LOW);
 
-
+    i = 0;
     // // Serial.println("Setting up decoder...");
     // digitalWrite(index_out, HIGH);
     // delay(500);
@@ -241,85 +268,118 @@ void loop(){
         // Serial.println("Homing...");       
     }
 
-    getEncoderPos();
-    Serial.println(encoder0Pos);
-    pidCalculation();
+
+        setpoint = waypoints[i];
+        // getEncoderPos();
+        // Serial.println(encoder0Pos);
+        pidCalculation();
+        // Serial.print(pidTermScaled);
+        // Serial.print("\t");
+        // Serial.println(encoder0Pos*0.9);
+
+
+
+    // getEncoderPos();
     // Serial.print(pidTermScaled);
     // Serial.print("\t");
     // Serial.println(encoder0Pos*0.9);
-
-
-
-  // getEncoderPos();
-  // Serial.print(pidTermScaled);
-  // Serial.print("\t");
-  // Serial.println(encoder0Pos*0.9);
-  if (angle == setpoint)
-  {
-    reachPointLight();
-    // delay(100);
-    // lastIntTerm=0;
-    // intTerm=0;
-    // lastDerivTerm=0;
-    //lastError = angle -setpoint;
-    Serial.println("A");
-    // setpoint = -setpoint;
-    // delay(500);
-  }
-  else{
-
-    if (angle < setpoint) {
-    
-      digitalWrite(dir1, LOW);// Forward motion
-      digitalWrite(dir2, HIGH);
-
-      if (error <= 0.0174533){   //1 degrees
-
-        smallErrorLight();
-        //setpoint = -0.79;
-        //delay(2000);
-      }
-
-      else if (error < 0.05) //2.864789 degrees
-      {
-        
-        smallUndershootLight();
-
-      }
-     
-      else { //5.72958 degrees
-
-        largeUndershootLight();
-        // Serial.println("Large undershoot");
-      }
-
-    } 
-    else {
-      digitalWrite(dir1, HIGH);//Reverse motion
-      digitalWrite(dir2, LOW);
-
-      if (abs(error) <= 0.0174533){   // 0.5729578 degrees
-
-        smallErrorLight();
-
-      }
-
-      else if (abs(error) < 0.05) //2.864789 degrees
-      {
-
-        smallOvershootLight();
-
-      }
-      else { // larger than 5.72958 degrees
-
-        largeOvershootLight();
-
-      }
+    if (angle == setpoint)
+    {
+        reachPointLight();
+        // delay(100);
+        // lastIntTerm=0;
+        // intTerm=0;
+        // lastDerivTerm=0;
+        //lastError = angle -setpoint;
+        //Serial.println("A");
+        //setpoint = -setpoint;
+        digitalWrite(dir1, LOW);// Forward motion
+        digitalWrite(dir2, LOW);
+        //delay(1000);
     }
-  }
 
-  analogWrite(pwm, pidTermScaled);
+    else if (abs(angle - setpoint) <= 0.0174533){   //1 degrees
 
+            smallErrorLight();
+            digitalWrite(dir1, LOW);// Forward motion
+            digitalWrite(dir2, LOW);
+            // setpoint = -setpoint;
+            // delay(1000);
+
+            lastIntTerm=0;
+            intTerm=0;
+            lastDerivTerm=0;
+            i++;
+            if (i == 16)
+            {
+                i = 0;
+            }
+
+            // Serial.print(setpoint);
+            // Serial.print("\t");
+            //Serial.println(encoder0Pos*0.9);
+
+            //delay(50);
+
+
+
+        }
+
+    else{
+
+        if (angle < setpoint) {
+        
+        digitalWrite(dir1, LOW);// Forward motion
+        digitalWrite(dir2, HIGH);
+
+        //   if (error <= 0.0174533){   //1 degrees
+
+        //     smallErrorLight();
+        //     //setpoint = -0.79;
+        //     //delay(2000);
+        //   }
+
+        if (error < 0.05) //2.864789 degrees
+        {
+            
+            smallUndershootLight();
+        
+
+        }
+        
+        else { //5.72958 degrees
+
+            largeUndershootLight();
+            // Serial.println("Large undershoot");
+        }
+
+        } 
+        else {
+        digitalWrite(dir1, HIGH);//Reverse motion
+        digitalWrite(dir2, LOW);
+
+        //   if (abs(error) <= 0.0174533){   // 0.5729578 degrees
+
+        //     smallErrorLight();
+
+        //   }
+
+        if (abs(error) < 0.05) //2.864789 degrees
+        {
+
+            smallOvershootLight();
+
+        }
+        else { // larger than 5.72958 degrees
+
+            largeOvershootLight();
+
+        }
+        }
+    }
+
+    analogWrite(pwm, pidTermScaled);
+    
 }
 
 void reachPointLight()
@@ -386,7 +446,7 @@ void largeOvershootLight()
 void timerISR()
 {
   // getEncoderPos();   //convert to radians
-  change = true;
+  getEncoderPos();
 }
 
 void pidCalculation(){
@@ -394,7 +454,7 @@ void pidCalculation(){
 
 
   //changeError = error - lastError; // derivative term
-  angle = encoder0Pos * 0.015708;
+  //angle = encoder0Pos * 0.015708;
   error = setpoint - angle;
   intTerm=(lastIntTerm + Ki*error*(sampleTime));
 
@@ -422,7 +482,7 @@ void getEncoderPos()
     digitalWrite(sel1Pin, HIGH);
     digitalWrite(sel2Pin, LOW); //reads lowest byte
     
-    delayMicroseconds(5);
+    // delayMicroseconds(5);
 
     int pos0 = digitalRead(daPin0);
     int pos1 = digitalRead(daPin1);
@@ -433,7 +493,7 @@ void getEncoderPos()
     int pos6 = digitalRead(daPin6);
     int pos7 = digitalRead(daPin7);
 
-    delayMicroseconds(5);
+    // delayMicroseconds(5);
 
     digitalWrite(sel1Pin, LOW);
     digitalWrite(sel2Pin, LOW); //reads second lowest byte 
@@ -463,7 +523,10 @@ void getEncoderPos()
     bitWrite(encoder0Pos, 13, pos13);
     bitWrite(encoder0Pos, 14, pos14);
     bitWrite(encoder0Pos, 15, pos15);
+    angle = encoder0Pos * 0.015708;
 
-    // Serial.println(encoder0Pos*0.9);
+    
+
+   //Serial.println(encoder0Pos*0.9);
 
 }
