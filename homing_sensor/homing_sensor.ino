@@ -18,12 +18,13 @@ pinMode(pwm, OUTPUT);
   pinMode(dir2, OUTPUT);
     digitalWrite(dir1, LOW);// Stop
   digitalWrite(dir2, HIGH);
-  analogWrite(pwm, 50);
+  analogWrite(pwm, 100);
 }
 
 void loop () {
-
+  
   home= digitalRead(homePin);
+  Serial.println(home);
   if (home){
     digitalWrite(dir1, LOW);// Stop
     digitalWrite(dir2, LOW);

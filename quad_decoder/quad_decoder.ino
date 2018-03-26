@@ -1,5 +1,6 @@
 #define oePin  4 //active low
-#define DPin 5
+#define dirPin 5
+//#define indexPin 2
 #define sel1Pin  13
 #define sel2Pin  12
 #define daPin0   22
@@ -10,6 +11,7 @@
 #define daPin5   27
 #define daPin6   28
 #define daPin7   29
+#define indexPin 2
 
 
 // byte encoderPos;
@@ -22,7 +24,7 @@ char pos[8];
 
 void setup() {
   Serial.begin(115200);
-  pinMode(DPin, INPUT);
+  pinMode(dirPin, INPUT);
   pinMode(daPin0, INPUT);//encoder pins
   pinMode(daPin1, INPUT);//encoder pins
   pinMode(daPin2, INPUT);//encoder pins
@@ -35,13 +37,16 @@ void setup() {
 
   pinMode(sel1Pin, OUTPUT);//encoder pins
   pinMode(sel2Pin, OUTPUT);//encoder pins
-
+  
   pinMode(oePin, OUTPUT);
 
   digitalWrite(sel1Pin, HIGH);
   digitalWrite(sel2Pin, LOW); //reads lowest 
   digitalWrite(oePin, LOW);
   
+  pinMode(indexPin, INPUT);
+  // pinMode(testPin, INPUT);
+  // pinMode(dirPin, INPUT);
   
   
 }
@@ -59,7 +64,8 @@ void loop () {
 
   digitalWrite(sel1Pin, HIGH);
   digitalWrite(sel2Pin, LOW); //reads lowest byte
-  
+  int index = digitalRead(indexPin);
+  int dir = digitalRead(dirPin);
   int pos0 = digitalRead(daPin0);
   int pos1 = digitalRead(daPin1);
   int pos2 = digitalRead(daPin2);
@@ -126,10 +132,14 @@ void loop () {
 
     Serial.print(encoder0Pos);
     Serial.print("\t");
-    Serial.println(encoder0Pos*0.9);
+    Serial.print(encoder0Pos*0.9);
+    Serial.print("\t Index: ");
+    Serial.print(index);
+    Serial.print("\t Direction: ");
+    Serial.println(dir);
     // Serial.print("\t");
     // Serial.println((~encoder0Pos+1)*0.9);
-
+// 
 
     delay(200);
 
