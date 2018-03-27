@@ -39,7 +39,7 @@ bool Motor::control()
     float error = angle - desired;
     bool reached;
 
-    if (abs(error) <= 0.0174533)
+    if (abs(error) <= resolution)
     {   //1 degrees
 
             smallErrorLight();
@@ -52,7 +52,7 @@ bool Motor::control()
         bool reached = false;
         forward();
 
-        if (error < 0.05) //2.864789 degrees
+        if (error < 2.5*resolution) //2.864789 degrees
         {
             smallUndershootLight();
         }
@@ -65,7 +65,7 @@ bool Motor::control()
         reached = false;
         reverse();
 
-        if (abs(error) < 0.05) //2.864789 degrees
+        if (abs(error) < 2.5*resolution) //2.864789 degrees
         {
 
             smallOvershootLight();
