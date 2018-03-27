@@ -13,9 +13,9 @@ class Leds
         Leds(){};
         ~Leds(){};
 
-        void setLargeUndershoot(int pin) { largeUndershoot = pin; pinMode(pin, OUTPUT);  };
-        void setSmallUndershoot(int pin) { smallUndershoot = pin; pinMode(pin, OUTPUT);  };
-        void setSmallError(int pin)      { smallError = pin;      pinMode(pin, OUTPUT);  };
+        void setLargeUndershoot(int pin)    { largeUndershoot = pin; pinMode(pin, OUTPUT);  };
+        void setSmallUndershoot(int pin)    { smallUndershoot = pin; pinMode(pin, OUTPUT);  };
+        void setSmallError(int pin)         { smallError = pin;      pinMode(pin, OUTPUT);  };
         void setSmallOvershoot(int pin)     { smallOvershoot  = pin; pinMode(pin, OUTPUT);  };
         void setLargeOvershoot(int pin)     { largeOvershoot = pin;  pinMode(pin, OUTPUT);  };
 

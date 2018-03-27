@@ -10,12 +10,15 @@ class PID
         Memory prop;
         Memory integ;
         Memory deriv;
-        float desired;
         float sampleTime;
         float Kp;
         float Ki;
         float Kd;
         float N;
+
+    protected:
+        float desired;
+        float pidTerm;
     
     public:
         PID(){};
@@ -37,14 +40,13 @@ class PID
             deriv.setPrev(0);
         };
 
-        float calculate(float currAngle);
+        void calculate(float currAngle);
 
 };
 
-float PID::calculate(float currAngle)
+void PID::calculate(float currAngle)
 {
-  float pidTerm;
-
+  
   error.setCurr(desired - currAngle);
   
   integ.setCurr(integ.getPrev() + Ki*error.getCurr()*(sampleTime));
@@ -58,7 +60,5 @@ float PID::calculate(float currAngle)
   integ.setPrev(integ.getCurr());
   deriv.setPrev(deriv.getCurr());
   error.setPrev(error.getCurr());
-
-  return pidTerm;
 
 }

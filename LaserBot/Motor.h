@@ -14,57 +14,25 @@ struct homing
     bool index;
 };
 
-class Motor
+class Motor: public Encoder, public Driver, public Leds, public PID
 {
     private:
-        int pos;
-        float angle;
-        float pidTerm;
-        float desired;
         homing homing;
         int homingSpeed;
-        bool dir1;
-        PID pid;
-
-
     public:
         Motor(){};
         Motor(float P, float I, float D, float filter, float t)
-        {
-            PID pid(P, I, D, filter, t);
-        };
+        : PID(P, I, D, filter, t) {};
         
         ~Motor(){};
 
-        Encoder encoder;
-        Leds led;
-        Driver driver;
-
-        void calculate();
         bool control();
-        void updateAngle();
         bool home();
 
         void setIndex(int pin)          { homing.trig = pin; };
-        void setHomingSpeed (int speed) { homingSpeed = speed; };
-
-        float getAngle()   { return angle;   };
-        int getPos()       { return pos;     };
-        float getPidTerm() { return pidTerm; };
-
-    
+        void setHomingSpeed (int speed) { homingSpeed = speed; };    
 };
 
-void Motor::updateAngle()
-{
-    pos = encoder.getPos();
-    angle = pos * 0.015708;
-}
-
-void Motor::calculate()
-{
-    pidTerm = pid.calculate(angle);
-}
 
 bool Motor::control()
 {
@@ -74,49 +42,49 @@ bool Motor::control()
     if (abs(error) <= 0.0174533)
     {   //1 degrees
 
-            led.smallErrorLight();
-            driver.stop();
+            smallErrorLight();
+            stop();
             reached = true;
     }
 
     else if (angle < desired) 
     {
         bool reached = false;
-        driver.forward();
+        forward();
 
         if (error < 0.05) //2.864789 degrees
         {
-            led.smallUndershootLight();
+            smallUndershootLight();
         }
         else 
         { //5.72958 degrees
-            led.largeUndershootLight();
+            largeUndershootLight();
         } 
     }
     else {
         reached = false;
-        driver.reverse();
+        reverse();
 
         if (abs(error) < 0.05) //2.864789 degrees
         {
 
-            led.smallOvershootLight();
+            smallOvershootLight();
 
         }
         else { // larger than 5.72958 degrees
 
-            led.largeOvershootLight();
+            largeOvershootLight();
 
         }
     }
-    driver.setPWM(pidTerm);
+    setPWM(pidTerm);
     return reached;
 }
 
 bool Motor::home()
 {
     bool reached = false;
-    driver.setPWM(homingSpeed);
+    setPWM(homingSpeed);
     while (reached == false)
     {
         if (digitalRead(homing.trig) == 0)
@@ -125,11 +93,11 @@ bool Motor::home()
                     digitalWrite(homing.index, HIGH);
                     delay(500);
                     digitalWrite(homing.index, LOW);
-                    driver.stop();
+                    stop();
         }
-    driver.forward();
+    forward();
     delay(10);
-    driver.stop();
+    stop();
     delay(100);
     }
 

@@ -17,12 +17,20 @@ class Encoder
         int da6;
         int da7;
         int index;
+        int encoderPos;
+        int slots;
+        int gearRatio;
+        // float resolution = 360/(4*slots)*3.14159/180/gearRatio;
+    
+    protected:
+        float angle = encoderPos*resolution;
+        float resolution = 360/(4*slots)*3.14159/180/gearRatio;
     
     public:
         Encoder(){};
         ~Encoder(){};
         
-        void setOe(int pin)    { oe = pin;    pinMode(pin, OUTPUT);  digitalWrite(oePin, LOW); };
+        void setOe(int pin)    { oe = pin;    pinMode(pin, OUTPUT);  digitalWrite(oe, LOW); };
         void setD(int pin)     { d = pin;     pinMode(pin, INPUT);   };
         void setSel1(int pin)  { sel1 = pin;  pinMode(pin, OUTPUT);  };
         void setSel2(int pin)  { sel2 = pin;  pinMode(pin, OUTPUT);  };
@@ -35,27 +43,33 @@ class Encoder
         void setDa6(int pin)   { da6 = pin;   pinMode(pin, INPUT);   };
         void setDa7(int pin)   { da7 = pin;   pinMode(pin, INPUT);   };
         void setIndex(int pin) { index = pin; pinMode(pin, INPUT);   };
+        
+        void setSlots(int num) { slots = num; };
+        void setGearRatio(int ratio) { gearRatio = ratio; };
+        // int getOe()    { return oe;    };
+        // int getD()     { return d;     };
+        // int getSel1()  { return sel1;  };
+        // int getSel2()  { return sel2;  };
+        // int getDa0()   { return da0;   };
+        // int getDa1()   { return da1;   };
+        // int getDa2()   { return da2;   };
+        // int getDa3()   { return da3;   };
+        // int getDa4()   { return da4;   };
+        // int getDa5()   { return da5;   };
+        // int getDa6()   { return da6;   };
+        // int getDa7()   { return da7;   };
+        // int getIndex() { return index; };
 
-        void getOe()    { return oe;    };
-        void getD()     { return d;     };
-        void getSel1()  { return sel1;  };
-        void getSel2()  { return sel2;  };
-        void getDa0()   { return da0;   };
-        void getDa1()   { return da1;   };
-        void getDa2()   { return da2;   };
-        void getDa3()   { return da3;   };
-        void getDa4()   { return da4;   };
-        void getDa5()   { return da5;   };
-        void getDa6()   { return da6;   };
-        void getDa7()   { return da7;   };
-        void getIndex() { return index; };
+        int getPos()     { return encoderPos;   };
+        float getAngle() { return angle; };
 
-        int getPos();
+        void readPos();
+
 };
 
-int Encoder::getPos()
+void Encoder::readPos()
 {
-    int encoderPos = 0;
+    encoderPos = 0;
     digitalWrite(sel1, HIGH);
     digitalWrite(sel2, LOW); //reads lowest byte
 
@@ -97,5 +111,4 @@ int Encoder::getPos()
     bitWrite(encoderPos, 14, pos14);
     bitWrite(encoderPos, 15, pos15);
 
-    return encoderPos;
 }

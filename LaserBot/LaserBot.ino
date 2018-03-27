@@ -4,23 +4,24 @@ Motor x;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  x.encoder.setOe(4);
-  x.encoder.setD(5);
-  x.encoder.setDa0(22);
-  x.encoder.setDa1(23);
-  x.encoder.setDa2(24);
-  x.encoder.setDa3(25);
-  x.encoder.setDa4(26);
-  x.encoder.setDa5(27);
-  x.encoder.setDa6(28);
-  x.encoder.setDa7(29);
-  
+  x.setOe(4);
+  x.setD(5);
+  x.setDa0(22);
+  x.setDa1(23);
+  x.setDa2(24);
+  x.setDa3(25);
+  x.setDa4(26);
+  x.setDa5(27);
+  x.setDa6(28);
+  x.setDa7(29);
+  x.setSlots(100);
+  x.setGearRatio(1);
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  x.updateAngle();
-  float angle = x.getPos();
+  x.readPos();
+  float angle = x.getAngle();
   Serial.println(angle);
 }

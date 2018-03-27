@@ -10,9 +10,11 @@ class Memory
     public:
          Memory(){};
          ~Memory(){};
+
          float getCurr() { return curr; };
          float getPrev() { return prev; };
+
          void setCurr(float currentTerm) { curr = currentTerm; };
-         void setPrev(float prevTerm) { prev = prevTerm; };
+         void setPrev(float prevTerm)    { prev = prevTerm; };
 
 }; 
