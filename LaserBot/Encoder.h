@@ -22,7 +22,7 @@ class Encoder
         Encoder(){};
         ~Encoder(){};
         
-        void setOe(int pin)    { oe = pin;    pinMode(pin, OUTPUT);  };
+        void setOe(int pin)    { oe = pin;    pinMode(pin, OUTPUT);  digitalWrite(oePin, LOW); };
         void setD(int pin)     { d = pin;     pinMode(pin, INPUT);   };
         void setSel1(int pin)  { sel1 = pin;  pinMode(pin, OUTPUT);  };
         void setSel2(int pin)  { sel2 = pin;  pinMode(pin, OUTPUT);  };
