@@ -24,7 +24,7 @@ class Encoder
     
     protected:
         float angle = encoderPos*resolution;
-        float resolution = 360/(4*slots)*3.14159/180/gearRatio;
+        float resolution = 360/(4*slots)*3.14159/180/gearRatio; 
     
     public:
         Encoder(){};
@@ -46,19 +46,6 @@ class Encoder
         
         void setSlots(int num) { slots = num; };
         void setGearRatio(int ratio) { gearRatio = ratio; };
-        // int getOe()    { return oe;    };
-        // int getD()     { return d;     };
-        // int getSel1()  { return sel1;  };
-        // int getSel2()  { return sel2;  };
-        // int getDa0()   { return da0;   };
-        // int getDa1()   { return da1;   };
-        // int getDa2()   { return da2;   };
-        // int getDa3()   { return da3;   };
-        // int getDa4()   { return da4;   };
-        // int getDa5()   { return da5;   };
-        // int getDa6()   { return da6;   };
-        // int getDa7()   { return da7;   };
-        // int getIndex() { return index; };
 
         int getPos()     { return encoderPos;   };
         float getAngle() { return angle; };

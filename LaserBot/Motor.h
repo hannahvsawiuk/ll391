@@ -6,8 +6,6 @@
 
 using namespace std;
 
-
-
 struct homing
 {
     int trig;
@@ -83,13 +81,13 @@ bool Motor::control()
 
 bool Motor::home()
 {
-    bool reached = false;
+    bool origin = false;
     setPWM(homingSpeed);
-    while (reached == false)
+    while (origin == false)
     {
         if (digitalRead(homing.trig) == 0)
         {
-                    reached = true;
+                    origin = true;
                     digitalWrite(homing.index, HIGH);
                     delay(500);
                     digitalWrite(homing.index, LOW);
@@ -101,5 +99,5 @@ bool Motor::home()
     delay(100);
     }
 
-    return reached;
+    return origin;
 }

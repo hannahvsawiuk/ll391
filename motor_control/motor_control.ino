@@ -2,9 +2,16 @@
     by Dejan Nedelkovski, www.HowToMechatronics.com
 */
 
-#define enA 9
-#define in1 35
-#define in2 33
+#define enA 8
+#define in1 9
+#define in2 10
+
+
+#define enB 13
+#define in1_B 11
+#define in2_B 12
+
+
 
 int rotDirection = 0;
 int pressed = false;
@@ -19,6 +26,10 @@ void setup() {
     pinMode(in1, OUTPUT);
     pinMode(in2, OUTPUT);
 
+    pinMode(enB, OUTPUT);
+    pinMode(in1_B, OUTPUT);
+    pinMode(in2_B, OUTPUT);
+
     // pinMode(encoder0PinA, INPUT);
     // pinMode(encoder0PinB, INPUT);
 
@@ -29,34 +40,41 @@ void setup() {
     // attachInterrupt(1, doEncoderB, CHANGE);
     // Set initial rotation direction
     Serial.println("Setting initial direction");
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH); 
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW); 
 }
 
 void loop() {
     int pwmOutput;
    // Serial.println("Setting PWM signal");
-    int pwmIn = 100; // speed of 3234 RPM
+    // int pwmIn = 100; // speed of 3234 RPM
 
-    pwmOutput = map(pwmIn, 0, 100, 0, 255);
-    analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin
+    // pwmOutput = map(pwmIn, 0, 100, 0, 255);
+    analogWrite(enA, 100); // Send PWM signal to L298N Enable pin
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW); 
+    Serial.println("Turning");
+
+    analogWrite(enB, 255); // Send PWM signal to L298N Enable pin
+    digitalWrite(in1_B, HIGH);
+    digitalWrite(in2_B, LOW); 
   //  Serial.println("Sent PWM Signal");
   //  Serial.println(encoder0Pos);
    
-   // Serial.println("Now changing to backward rotation");
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
+  //  // Serial.println("Now changing to backward rotation");
+  //   digitalWrite(in1, LOW);
+  //   digitalWrite(in2, HIGH);
 
-    delay(3000);
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, LOW);
-    delay(200);
-    digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
-    delay(3000);
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, LOW);
-    delay(200);
+  //   delay(3000);
+  //   digitalWrite(in1, LOW);
+  //   digitalWrite(in2, LOW);
+  //   delay(200);
+  //   digitalWrite(in1, HIGH);
+  //   digitalWrite(in2, LOW);
+  //   delay(3000);
+  //   digitalWrite(in1, LOW);
+  //   digitalWrite(in2, LOW);
+  //   delay(200);
     // // if ( rotDirection == 0) {
     // //     digitalWrite(in1, HIGH);
     // //     digitalWrite(in2, LOW);
