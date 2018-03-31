@@ -3,11 +3,11 @@
 //#define indexPin 2
 #define reset 49
 #define sel1Pin  45
-#define sel2Pin  38
+#define sel2Pin  39
 #define daPin0   44
 #define daPin1   36
 #define daPin2  37
-#define daPin3   39
+#define daPin3   38
 #define daPin4   40
 #define daPin5   41
 #define daPin6   42
