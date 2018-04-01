@@ -1,26 +1,30 @@
 #include <Math.h>
 #include <TimerOne.h>
-#define oePin  4 //active low
-#define DPin 5
-#define sel1Pin  13
-#define sel2Pin  12
-#define daPin0   22
-#define daPin1   23
-#define daPin2  24
-#define daPin3   25
-#define daPin4   26
-#define daPin5   27
-#define daPin6   28
-#define daPin7   29
-#define reachPoint 36
-#define largeUndershoot 3
-#define smallUndershoot 10
-#define smallError 8
-#define smallOvershoot 7
-#define largeOvershoot 6
-#define dir1 35
-#define dir2 33
-#define pwm 9
+#define oePin  46 //active low
+#define dirPin 47
+//#define indexPin 2
+#define reset 49
+#define sel1Pin  45
+#define sel2Pin  39
+#define daPin0   44
+#define daPin1   36
+#define daPin2  37
+#define daPin3   38
+#define daPin4   40
+#define daPin5   41
+#define daPin6   42
+#define daPin7   48
+
+#define largeUndershoot 14
+#define smallUndershoot 15
+#define smallError 16
+#define smallOvershoot 17
+#define largeOvershoot 18
+
+
+#define dir1 9
+#define dir2 10
+#define pwm 8
 
 // byte encoderPos;
  int encoder0Pos = 0;
@@ -129,12 +133,12 @@ int i = 0;
 
 void setup() {
   Serial.begin(115200);
-  pinMode(reachPoint, OUTPUT); 
-  pinMode(smallOvershoot, OUTPUT);
-  pinMode(largeOvershoot, OUTPUT); 
-  pinMode(smallError, OUTPUT);
-  pinMode(smallUndershoot, OUTPUT); 
-  pinMode(largeOvershoot, OUTPUT);
+  // pinMode(reachPoint, OUTPUT); 
+  // pinMode(smallOvershoot, OUTPUT);
+  // pinMode(largeOvershoot, OUTPUT); 
+  // pinMode(smallError, OUTPUT);
+  // pinMode(smallUndershoot, OUTPUT); 
+  // pinMode(largeOvershoot, OUTPUT);
 
   // Serial.println("Setting up...");
   pinMode(pwm, OUTPUT);
@@ -146,11 +150,11 @@ void setup() {
   digitalWrite(reachPoint,LOW);
   digitalWrite(dir1, LOW);// Stop
   digitalWrite(dir2, LOW);
-  digitalWrite(largeUndershoot, LOW);
-  digitalWrite(smallOvershoot, LOW);
-  digitalWrite(smallError, LOW);
-  digitalWrite(smallUndershoot, LOW);
-  digitalWrite(largeOvershoot, LOW);
+  // digitalWrite(largeUndershoot, LOW);
+  // digitalWrite(smallOvershoot, LOW);
+  // digitalWrite(smallError, LOW);
+  // digitalWrite(smallUndershoot, LOW);
+  // digitalWrite(largeOvershoot, LOW);
   pinMode(DPin, INPUT);
   pinMode(daPin0, INPUT);//encoder pins
   pinMode(daPin1, INPUT);//encoder pins
@@ -170,6 +174,9 @@ void setup() {
   digitalWrite(sel1Pin, HIGH);
   digitalWrite(sel2Pin, LOW); //reads lowest 
   digitalWrite(oePin, LOW);
+  digitalWrite(reset, LOW);
+  delay(100);
+  digitalWrite(reset, HIGH);
 
 }
 
@@ -218,7 +225,7 @@ void loop(){
 
       if (error <= 0.0174533){   //1 degrees
 
-        smallErrorLight();
+        // smallErrorLight();
         //setpoint = -0.79;
         //delay(2000);
       }
@@ -226,13 +233,13 @@ void loop(){
       else if (error < 0.05) //2.864789 degrees
       {
         
-        smallUndershootLight();
+        // smallUndershootLight();
 
       }
      
       else { //5.72958 degrees
 
-        largeUndershootLight();
+        // largeUndershootLight();
         // Serial.println("Large undershoot");
       }
 
@@ -243,19 +250,19 @@ void loop(){
 
       if (abs(error) <= 0.0174533){   // 0.5729578 degrees
 
-        smallErrorLight();
+        // smallErrorLight();
 
       }
 
       else if (abs(error) < 0.05) //2.864789 degrees
       {
 
-        smallOvershootLight();
+        // smallOvershootLight();
 
       }
       else { // larger than 5.72958 degrees
 
-        largeOvershootLight();
+        // largeOvershootLight();
 
       }
     }
