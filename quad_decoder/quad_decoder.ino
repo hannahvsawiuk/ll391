@@ -67,7 +67,7 @@ void loop () {
   // pos[5] = digitalRead(daPin5);
   // pos[6] = digitalRead(daPin6);
   // pos[7] = digitalRead(daPin7);
-
+  long unsigned start = micros();
   digitalWrite(sel1Pin, HIGH);
   digitalWrite(sel2Pin, LOW); //reads lowest byte
   // int index = digitalRead(indexPin);
@@ -80,7 +80,17 @@ void loop () {
   int pos5 = digitalRead(daPin5);
   int pos6 = digitalRead(daPin6);
   int pos7 = digitalRead(daPin7);
+
+  bitWrite(encoder0Pos, 0, pos0);
+  bitWrite(encoder0Pos, 1, pos1);
+  bitWrite(encoder0Pos, 2, pos2);
+  bitWrite(encoder0Pos, 3, pos3);
+  bitWrite(encoder0Pos, 4, pos4);
+  bitWrite(encoder0Pos, 5, pos5);
+  bitWrite(encoder0Pos, 6, pos6);
+  bitWrite(encoder0Pos, 7, pos7);
   
+
   // delay(5);
 
   digitalWrite(sel1Pin, LOW);
@@ -98,34 +108,27 @@ void loop () {
   int pos15 = digitalRead(daPin7);
   
   
-  Serial.print(pos15);
-  Serial.print(pos14);
-  Serial.print(pos13);
-  Serial.print(pos12);
-  Serial.print(pos11);
-  Serial.print(pos10);
-  Serial.print(pos9);
-  Serial.print(pos8);
-  Serial.print(pos7);
-  Serial.print(pos6);
-  Serial.print(pos5);
-  Serial.print(pos4);
-  Serial.print(pos3);
-  Serial.print(pos2);
-  Serial.print(pos1);
-  Serial.print(pos0);
+  // Serial.print(pos15);
+  // Serial.print(pos14);
+  // Serial.print(pos13);
+  // Serial.print(pos12);
+  // Serial.print(pos11);
+  // Serial.print(pos10);
+  // Serial.print(pos9);
+  // Serial.print(pos8);
+  // Serial.print(pos7);
+  // Serial.print(pos6);
+  // Serial.print(pos5);
+  // Serial.print(pos4);
+  // Serial.print(pos3);
+  // Serial.print(pos2);
+  // Serial.print(pos1);
+  // Serial.print(pos0);
 
-  Serial.print("\t");
+  // Serial.print("\t");
 
   
-  bitWrite(encoder0Pos, 0, pos0);
-  bitWrite(encoder0Pos, 1, pos1);
-  bitWrite(encoder0Pos, 2, pos2);
-  bitWrite(encoder0Pos, 3, pos3);
-  bitWrite(encoder0Pos, 4, pos4);
-  bitWrite(encoder0Pos, 5, pos5);
-  bitWrite(encoder0Pos, 6, pos6);
-  bitWrite(encoder0Pos, 7, pos7);
+ 
   bitWrite(encoder0Pos, 8, pos8);
   bitWrite(encoder0Pos, 9, pos9);
   bitWrite(encoder0Pos, 10, pos10);
@@ -135,8 +138,8 @@ void loop () {
   bitWrite(encoder0Pos, 14, pos14);
   bitWrite(encoder0Pos, 15, pos15);
 
-
-    Serial.print(encoder0Pos);
+    long unsigned end = micros();
+    Serial.print(end - start);
     Serial.print("\t");
     Serial.println(encoder0Pos*0.9);
     // Serial.print("\t Index: ");

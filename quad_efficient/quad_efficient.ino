@@ -49,12 +49,12 @@ void setup() {
 
 void loop () {
 
-    int pos = qd1();
-    Serial.print(pos);
-    Serial.print("\t");
-    Serial.println(pos*0.9);
+    // int pos = qd1();
+    // Serial.print(pos);
+    // Serial.print("\t");
+    // Serial.println(pos*0.9);
     
-
+    qd1();
     
 
     
@@ -67,10 +67,10 @@ void loop () {
 
 }
 
-int qd1()
+void qd1()
 {
     int pos = 0;
-
+    // long unsigned start = micros();
     DDRC = B01100100;
     DDRL = B00011001;
     DDRG = B00000100;
@@ -92,6 +92,9 @@ int qd1()
           (PINL & B10000000) >> 1 |
           (PINL & B00000010) << 6; 
     
+    // long unsigned end = micros();
+    // Serial.print(end - start);
+
         // set SEL1 LOW and SEL2 LOW
         // RESET is always high
     PORTL = B00000001;
@@ -108,12 +111,14 @@ int qd1()
           ((PING & B00000001) << 5) << 8 |
           ((PINL & B10000000) >> 1) << 8 |
           ((PINL & B00000010) << 6) << 8; 
-
-    return pos;
-
-
-
-
-
+    
+        // Serial.print("\t");
+    Serial.println(pos*0.9);
+    
+ 
+    // Serial.print("\t");
 
 }
+
+
+
