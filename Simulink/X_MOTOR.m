@@ -4,11 +4,11 @@
 MotorParam = ...
 ...             % Nominal Values
 [0              % NomV          (V)*    % Not measured
- 0              % NoLoadSpd     (rpm)   % Not measured
- 820           % NoLoadCurr    (mA)    % Values obtained through measurement
- 3950           % NomSpd        (rpm)   % Values obtained through measurement
+ 2700           % NoLoadSpd     (rpm)   % Not measured
+ 1020           % NoLoadCurr    (mA)    % Values obtained through measurement
+ 1354           % NomSpd        (rpm)   % Values obtained through measurement
  0              % NomTorque     (mNm)   % Values obtained from SPEC SHEET
- 820           % NomCurr       (mA)    % Values obtained through measurement
+ 820            % NomCurr       (mA)    % Values obtained through measurement
  0              % StallTorque   (mNm)   % Not measured
  0              % StallCurr     (A)     % Not measured
  0              % MaxEff        (%)     % Not measured

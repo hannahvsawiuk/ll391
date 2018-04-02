@@ -172,14 +172,14 @@ J0 = J0Internal + J0EncoderQ0;
 % --------------------------------------------
 % STGrad0 = Q0(SpdTorqueGrad)*(10^3)*RadPSecPerRPM;            % SpdTorqueGrad: rpm/mNm --> rpm/Nm --> rad/Nms = STGrad
 B0 = Q0(NoLoadCurr)/10^3*Q0(TorqueK)/10^3/(Q0(NoLoadSpd)*RadPSecPerRPM); % NoLoadCurr mA --> A, TorqueK mNm/A --> Nm/A, NoLoadSpd rpm --> rad/s
-
+% B0 = B1;
 % --------------------------------------------
 
 % --------------------------------------------
 
 % Mechanical Dynamics Vectors
 % --------------------------------------------
-Mech0n  = [1 0];                                             % Numerator: s
+Mech0n  = [1];                                             % Numerator: s
 Mech0d  = [J0 B0];                                           % Denominator: Js^2 + Bs + K
 JntSat0 =  JntLim0*RadPerDeg;                                % Joint saturation set at the angle limit of motor Q0, deg --> rad 
 % --------------------------------------------
