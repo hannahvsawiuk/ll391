@@ -11,8 +11,8 @@
 // SimpleTimer timer;
 int rotDirection = 0;
 int pressed = false;
-#define encoder0PinA  11
-#define encoder0PinB  12
+#define encoder0PinA  2
+#define encoder0PinB  3
 // volatile long signed encoder0Pos = 0;
 volatile unsigned rpm=0;
 volatile unsigned period_milli;
@@ -37,10 +37,10 @@ void setup() {
     pinMode(encoder0PinB, INPUT);
 
     // encoder pin on interrupt 0 (pin 2)
-    attachInterrupt(5, doEncoderA, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(2), doEncoderA, CHANGE);
 
     // encoder pin on interrupt 1 (pin 3)
-    attachInterrupt(6, doEncoderB, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(3), doEncoderB, CHANGE);
     // Set initial rotation direction
     // Serial.println("Setting initial direction");
     digitalWrite(in1, LOW);
@@ -176,7 +176,7 @@ void timer_ISR()
 void doEncoderA() {
   // look for a low-to-high on channel A
   encoder0Pos++;
-  Serial.println("HEreA");
+  // Serial.println("HEreA");
   //Serial.println (encoder0Pos, DEC);
   // use for debugging - remember to comment out
 }
@@ -184,5 +184,5 @@ void doEncoderA() {
 void doEncoderB()
 {
   encoder0Pos++;
-  Serial.println("HEreB");
+  // Serial.println("HEreB");
 }

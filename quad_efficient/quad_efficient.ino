@@ -25,6 +25,7 @@ bool begin=0;
 // char pos[8];
 bool change = false;
 volatile int encoderPos = 0;
+volatile int pos;
 volatile int start = 0;
 volatile int speed = 0;
 void setup() {
@@ -72,7 +73,7 @@ void loop () {
         // Serial.println((pos - start)*0.833*60);
         // start = pos;
         // change = false;
-        Serial.println(speed);
+        Serial.println(pos);
     }
 
 }
@@ -87,7 +88,7 @@ void qd1()
     // int pos = 0;
     // long unsigned start = micros();
 
-    int pos = 0;
+    pos = 0;
     // set SEL1 HIGH and SEL2 LOW
     // RESET is always high
     PORTL = B00010001;
@@ -126,11 +127,12 @@ void qd1()
     
         // Serial.print("\t");
     // Serial.println(pos);
-    speed = pos*0.8333*60;
+    // speed = pos*0.8333*60;
     change = true;
-    PORTB = B00000010;
-    PORTB = B00000000;
-    
+    // PORTB = B00000010;
+    // PORTB = B00000000;
+    // Serial.println(pos);
+
     // Serial.print("\t");
 
 }
