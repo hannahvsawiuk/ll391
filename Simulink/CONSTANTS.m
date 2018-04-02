@@ -12,12 +12,17 @@ screenDistance = 200;        % distance away from screen -> mm
 screenMaxX = 50;            % maxmimum positive x coordinate -> mm
 screenMaxY = 50;            % maximum positive y coordinate -> mm
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%       Q1 Shaft          %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-shaftMassQ1 = 0;          % mass of Q1 shaft -> kg
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Mass and Radius     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 shaftRadiusQ1 = 0.0;       % radius of Q1 shaft -> m
-shaftLengthQ1 = 0.0;       % length of Q1 shaft -> m
+rotorRadiusQ1 = 0.0;       % radius of Q1 rotor -> m
+
+shaftRadiusQ0 = 0.0;       % radius of Q0 shaft -> m
+rotorRadiusQ0 = 0.0;       % radius of Q0 rotor -> m
+
+massQ1 = 0;
+massQ0 = 220*10^(-3);      % mass of Q0 motor -> kg
 
 %%%%%%%%%%%%%%%%%%%%%%
 % Physical Constants %
@@ -30,7 +35,6 @@ RadPSecPerRPM = pi/30;  % (rad/s) / rpm
 
 Big = 1e6;              % General purpose large number
 Sml = 1e-6;             % General purpose small number
-
 
 %%%%%%%%%%%%%%%%%%
 % Specifications %
@@ -68,7 +72,7 @@ uSF    = 700;            % (um) = (uNm/N)
 % Joint Limit
 JntLim0 = atan(screenMaxX/screenDistance);             % Q0 joint limit (deg)
 % JntLim1 = atan(screenMaxY/screenDistance);             % Q1 joint limit (deg)
-JntLim1 = 90;
+JntLim1 = atan(screenMaxY/screenDistance);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Indices into MotorParam Vector for Maxon motors %

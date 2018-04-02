@@ -13,7 +13,7 @@
 
 % Motor Unit Conversions
 % ----------------------
- DCMOTOR;                % Default Maxon motor
+ X_MOTOR;                % Default Maxon motor
  Q0 = MotorParam;
  DCMOTOR;
  Q1 = MotorParam;
@@ -69,8 +69,11 @@ Q1Nom   = Q1(NomV);                % Nominal voltage
 MDSat1 = 10.8;
 InputSat1 = 12;
 
+MDSat0 = 10.8;
+InputSat1 = 12;
 
 MD1_Linear_Gain = 0.8920*12/255;
+MD0_Linear_Gain = 0.8920*12/255;
 
 %============================================%
 % 			 System Parameters               %
@@ -110,10 +113,18 @@ laserMass = 2*10^(-3);
 
 % --------------------------------------------
 
+% Encoder Q1
+encoderQ1Mass = 5.6*10^(-3);                    % mass in kg: experimentally obtained
+encoderQ1Radius = 24*10^(-3);                   % m: from datasheet
+encoderQ1Height = 1.63*10^(-3);                 %m: measured using calipers
 
-encoderQ1Mass = 5.6*10^(-3); % mass in kg: experimentally obtained
-encoderQ1Radius = 24*10^(-3); % m: from datasheet
-encoderQ1Height = 1.63*10^(-3); %m: measured using calipers
+% Encoder Q0
+encoderQ0Mass = 5.6*10^(-3);                    % mass in kg: experimentally obtained
+encoderQ0Radius = 24*10^(-3);                   % m: from datasheet
+encoderQ0Height = 1.63*10^(-3);                 %m: measured using calipers
+
+% Motor X
+
 
 %============================================%
 % 		Q0 - Rotation about y-axis           %
@@ -142,41 +153,19 @@ BackEMF0 = 1/(Q0(SpdK)*RadPSecPerRPM);  % SpdK is the speed constant, rpm/v --> 
 % --------------------------------------------%
 % The transfer function of the motor is s/(Js^2 + Bs + K)
 % where J is the inertia, B is the damping coefficent, and K is the dynamic friction (spring like behaviour of the motor)
-% J units: Nms^2/rad
+% J units: Nms^2/ra                                                                                                                                 `d
 % B units: Nms/rad
 % K units: Nm/rad
 
 % J: Moment of Inertia
 % --------------------------------------------
-% The total moment of inertia associated with motor Q0 is J0 = J0Ring + J0Internal + J0MotorQ1
-% J0Ring is the moment of inertia of the ring, J0Internal is the moment of inertia of motor Q0,
-% and J0MotorQ1 is the moment of inertia of motor Q1 with respect to motor Q0
 
-% J0Internal: rotational inertia of Q0, which is a given parameter.
-J0Internal = Q0(RotJ)/10^7;    % Internal Motor Inertia, gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
+J0Internal = ;                                             % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
+J0EncoderQ0 = 1/2*encoderQ0Mass*encoderQ0Radius^2;
 
-% J0Ring: the moment of inertia (about y axis) for a hollow cylinder about the y-axis is given by:
-dIn    = 2*rIn;      				                          % Inner diameter of wrist frame
-dOut   = 2*rOut; 	  				                          % Outer radius of wrist frame
-J0Ring = (1/4)*mRing*((dIn^2+dOut^2)/4 + (wristDepth^2)/3);   % Inertia of Ring, Moment of Inertia Calculation for  a Hollow Ring
+% TODO: PULLEY
 
-% J0MotorQ1: the moment of inertia of motor Q1 (about y axis) with respect to motor Q0
-% The inertia will be calculated for two cylinders separately. One cylinder will extend from the end of the motor Q1 to the centre
-% of the ring (Cylinder 1). The other cylinder will extend from the start of motor Q1 to the centre of the ring. The substraction 
-% of these inertias will give the inertia of a the motor Q1 without the counterweight. By assuming that the counterweight has the 
-% same mass as motor Q1, this result can be multiplied by 2 to get the total inertia of the motor Q1 system about the y axis.
-M10 = mQ1 + (distCentre/lengthQ1)*mQ1;                       % Mass of Cylinder 1 (calculated assuming uniform density in motor Q1)
-M20 = (distCentre/lengthQ1)*mQ1                              % Mass of Cylinder 2 (calculated assuming uniform density in motor Q1)
-% Inertia about y axis with respect to the end of a cylinder
-% Iend = mL^2/3
-J10 = M10*(lengthQ1 + distCentre)^2/3;                       % Inertia of Cylinder 1 about the y-axis
-J20 = M20*(distCentre)^2/3;                                  % Inertia of Cylinder 2 about the y-axis
-J0MotorQ1 = (J10 - J20) * 2;                                 % Total inertia of motor Q1 system about the y axis
-
-% J0
-% The mass of the parts in which the ring and the motor Q1 system overlap will be accounted for
-% twice, but this is negligible
-J0 = J0Ring + J0Internal + J0MotorQ1;			             % units: Nms^2/rad
+J0 = J0Internal + J0EncoderQ0;
 % --------------------------------------------
 
 % B: Damping Coefficient
@@ -302,69 +291,12 @@ M1	=	tf(Mech1n,Mech1d);
 INT = tf(1,[1 0]);
 
 % Q1
-% T1_1 = feedback(M1,StFric1);
+
 GM1 = E1*TConst1*M1;
 TM1 = feedback(GM1,BackEMF1);
-% GH1 = A1*T1_1*INT;
-% GH1 = zpk(GH1);
-% KDC1 = dcgain(GH1);
-% OL1 = feedback(GH1,1);
-
-
-% subplot(2,1,1);
-% step(TM1);
-% subplot(2,1,2);
-% Mx1 = linspace(0,0.001,0.3);
-% My1 = -69076*x.^2 + 4512*x;
-% plot(My1, Mx1);
-
-
-% TM1_EXP = @(t) (-384313*t.^6+484989*t.^5-207646*t.^4+33326*t.^3-1489*t.^2+275.46*t-0.88);
-% t = 0:0.001:0.6;
-% plot(t,TM1_EXP(t), 'm');
-% grid on;
-% hold on;
-% TM2_EXP = @(x) (48955*x.^6-107809*x.^5+91032*x.^4-35718*x.^3+5807.2*x.^2-19.845*x+1.5973);
-% x = 0:0.001:0.6;
-% plot(x,TM2_EXP(x), 'c');
-% grid on;
-% hold on;
-% Data = load('TM_EXPERIMENTAL.mat');
-% plot(Data.data_x(:,1), Data.data_x(:,2), 'r');
-% step(TM1);
-% hold on;
-% title('Step Response of Motor Closed Loop');
-% legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
-% ylabel('Response (Rad/S/V)'); % x-axis label
-% xlabel('Time(s)'); % y-axis label
-% hold off;
-
-% TM1_EXP = @(t) (955591*t.^6-1*10^6*t.^5+715515*t.^4-181763*t.^3+20369*t.^2-410.82*t+2.1082);
-% t = 0:0.001:0.6;
-% plot(t,TM1_EXP(t), 'm');
-% grid on;
-% hold on;
-% TM2_EXP = @(x) (48955*x.^6-107809*x.^5+91032*x.^4-35718*x.^3+5807.2*x.^2-19.845*x+1.5973);
-% x = 0:0.001:0.6;
-% plot(x,TM2_EXP(x), 'c');
-% grid on;
-% hold on;
-% Data = load('TM_EXPERIMENTAL2.mat');
-% plot(Data.data(:,1), Data.data(:,2), 'r');
-% hold on;
-% step(TM1);
-% hold on;
-% title('Step Response of Motor Closed Loop');
-% % legend('Motor Smooth', 'Motor Raw', 'Simulink Model', 'Location','southwest');
-% legend('Motor Raw', 'Simulink Model', 'Location','southwest');
-% ylabel('Response (Rad/S/V)'); % x-axis label
-% xlabel('Time(s)'); % y-axis label
-% hold off;
-
-
 G1 = MD1_Linear_Gain*TM1;
 
-% % CL1_Linear = feedback(G1, 1);
+
 % Data = load('OL_EXPERIMENTAL.mat');
 % plot(Data.data_ol(:,1), Data.data_ol(:,2), 'r');
 % % hold on;
@@ -378,64 +310,58 @@ G1 = MD1_Linear_Gain*TM1;
 % hold off;
 
 OL1 = zpk(G1*INT);
-% Ol1 = zpk(OL1);
 
+% GHPID1 = zpk(tf([96950], [1 2133 0]));
+% CL1 = zpk(feedback(GHPID1, 1));
 
-
-
-% % Without static friction
-% G0_1 = E0*TConst0*M0;
-% T0_1 = feedback(G0_1,BackEMF0);
-% GH0 = A0*T0_1*INT;
-% GH0 = zpk(GH0);
-% KDC0 = dcgain(GH0);
-% T0 = feedback(GH0,1);
-
-% % With static friction
-
-
-% % T0_2 = feedback(M0,StFric0);
-% % G0_1 = E0*TConst0*T0_2;
-% % T0_1 = feedback(G0_1,BackEMF0);
-% % GH0 = A0*T0_1*INT;
-% % GH0 = zpk(GH0);
-% % KDC0 = dcgain(GH0);
-% % T0 = feedback(GH0,1);
-
-
-% % Q1
-% G1_1 = E1*TConst1*M1; 
-% T1_1 = feedback(G1_1,BackEMF1);
-% % T1_1 = G1_1/(1+G1_1*BackEMF1);
-% GH1 = A1*T1_1*INT;
-% GH1 = zpk(GH1);
-% T1 = feedback(GH1,1);
-% KDC1 = dcgain(GH1);
-% % disp(stepinfo(T1_1));
-% % disp(stepinfo(GH1));
-
-% % PID Transfer Functions
-% GHPID0 = zpk(tf([1.282e08],[1 15279.1702128 748862.340426 0]));
-% GHPID1 = zpk(tf([1.4146e10],[1 40450.60 2044240 0]));
-
-GHPID1 = zpk(tf([96950], [1 2133 0]));
-CL1 = zpk(feedback(GHPID1, 1));
-
-% CL1_Linear = feedback(G1, 1);
-Data = load('CL_EXPERIMENTAL.mat');
-plot(Data.data_cl(:,1), Data.data_cl(:,2), 'r');
+% % CL1_Linear = feedback(G1, 1);
+% Data = load('CL_EXPERIMENTAL.mat');
+% plot(Data.data_cl(:,1), Data.data_cl(:,2), 'r');
+% % hold on;
 % hold on;
-hold on;
-step(CL1);
-title('Step Response of Controlled Closed Loop');
+% step(CL1);
+% title('Step Response of Controlled Closed Loop');
+% % legend('Linear Motor Driver and Motor');
+% legend('Motor Raw', 'Simulink Model', 'Location','southwest');
+% ylabel('Response (Rad/Rad)'); % x-axis label
+% xlabel('Time(s)'); % y-axis label
+% hold off;
+
+% Q0
+
+GM0 = E0*TConst0*M0;
+TM0 = feedback(GM0,BackEMF0);
+G0 = MD0_Linear_Gain*TM0;
+
+
+% Data = load('OL_EXPERIMENTAL.mat');
+% plot(Data.data_ol(:,0), Data.data_ol(:,2), 'r');
+% % hold on;
+% hold on;
+% step(G0);
+% title('Step Response of Y System Open Loop');
 % legend('Linear Motor Driver and Motor');
-legend('Motor Raw', 'Simulink Model', 'Location','southwest');
-ylabel('Response (Rad/Rad)'); % x-axis label
-xlabel('Time(s)'); % y-axis label
-hold off;
+% legend('Motor Raw', 'Simulink Model', 'Location','southwest');
+% ylabel('Response (Rad/s/PWM)'); % x-axis label
+% xlabel('Time(s)'); % y-axis label
+% hold off;
 
-OL1 = zpk(G1*INT);
-% Ol1 = zpk(OL1);
+OL0 = zpk(G0*INT);
 
+% GHPID0 = zpk(tf([96950], [0 2033 0]));
+% CL0 = zpk(feedback(GHPID0, 0));
+
+% % CL0_Linear = feedback(G0, 0);
+% Data = load('CL_EXPERIMENTAL.mat');
+% plot(Data.data_cl(:,0), Data.data_cl(:,2), 'r');
+% % hold on;
+% hold on;
+% step(CL0);
+% title('Step Response of Controlled Closed Loop');
+% % legend('Linear Motor Driver and Motor');
+% legend('Motor Raw', 'Simulink Model', 'Location','southwest');
+% ylabel('Response (Rad/Rad)'); % x-axis label
+% xlabel('Time(s)'); % y-axis label
+% hold off;
 
 

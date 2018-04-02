@@ -1,3 +1,4 @@
+#include <TimerOne.h>   
 #define oePin  46 //active low
 #define dirPin 47
 //#define indexPin 2
@@ -12,7 +13,9 @@
 #define daPin5   41
 #define daPin6   42
 #define daPin7   48
-
+#define enA 8
+#define in1 9
+#define in2 10
 
 // byte encoderPos;
 int encoder0Pos = 0;
@@ -20,8 +23,10 @@ int encoder0Pos = 0;
 // int position=0;
 bool begin=0;
 // char pos[8];
-
-
+bool change = false;
+volatile int encoderPos = 0;
+volatile int start = 0;
+volatile int speed = 0;
 void setup() {
   Serial.begin(115200);
 
@@ -40,42 +45,49 @@ void setup() {
   digitalWrite(reset, LOW);
   delay(100);
   digitalWrite(reset, HIGH);
-
-
-
   
+    DDRC = B01100100;
+    DDRL = B00011001;
+    DDRG = B00000100;
+    DDRD = B00000000;
+    DDRB = B00000010;
+
+    Timer1.initialize(3000);  // 3ms          // initialize timer1, and set a 1/2 second period
+    Timer1.attachInterrupt(qd1);  // attaches callback() as a timer overflow interrupt
+    analogWrite(enA, 255); // Send PWM signal to L298N Enable pin
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW); 
   
 }
 
 void loop () {
 
-    // int pos = qd1();
-    // Serial.print(pos);
-    // Serial.print("\t");
-    // Serial.println(pos*0.9);
-    
-    qd1();
-    
+    if (change)
+    {
+        // qd1();
+        // Serial.print(start);
+        // Serial.print("\t");
+        // Serial.print(pos);
+        // Serial.print("\t");
+        // Serial.println((pos - start)*0.833*60);
+        // start = pos;
+        // change = false;
+        Serial.println(speed);
+    }
 
-    
+}
 
-    //
-
-
-    delay(10);
-
-
+void timerISR()
+{
+    change = true;
 }
 
 void qd1()
 {
-    int pos = 0;
+    // int pos = 0;
     // long unsigned start = micros();
-    DDRC = B01100100;
-    DDRL = B00011001;
-    DDRG = B00000100;
-    DDRD = B00000000;
 
+    int pos = 0;
     // set SEL1 HIGH and SEL2 LOW
     // RESET is always high
     PORTL = B00010001;
@@ -113,9 +125,12 @@ void qd1()
           ((PINL & B00000010) << 6) << 8; 
     
         // Serial.print("\t");
-    Serial.println(pos*0.9);
+    // Serial.println(pos);
+    speed = pos*0.8333*60;
+    change = true;
+    PORTB = B00000010;
+    PORTB = B00000000;
     
- 
     // Serial.print("\t");
 
 }

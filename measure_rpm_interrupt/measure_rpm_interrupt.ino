@@ -3,16 +3,16 @@
 */
 
  #include <TimerOne.h>                                                                   
-#define enA 9
-#define in1 12
-#define in2 11
+#define enA 8
+#define in1 9
+#define in2 10
 #define FREQ 200
 // #include <SimpleTimer.h>
 // SimpleTimer timer;
 int rotDirection = 0;
 int pressed = false;
-#define encoder0PinA  2
-#define encoder0PinB  3
+#define encoder0PinA  11
+#define encoder0PinB  12
 // volatile long signed encoder0Pos = 0;
 volatile unsigned rpm=0;
 volatile unsigned period_milli;
@@ -37,14 +37,15 @@ void setup() {
     pinMode(encoder0PinB, INPUT);
 
     // encoder pin on interrupt 0 (pin 2)
-    attachInterrupt(0, doEncoderA, CHANGE);
+    attachInterrupt(5, doEncoderA, CHANGE);
 
     // encoder pin on interrupt 1 (pin 3)
-    attachInterrupt(1, doEncoderB, CHANGE);
+    attachInterrupt(6, doEncoderB, CHANGE);
     // Set initial rotation direction
     // Serial.println("Setting initial direction");
-    // digitalWrite(in1, LOW);
-    // digitalWrite(in2, HIGH);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+    analogWrite(enA, 255); // Send PWM signal to L298N Enable pin
 
     Timer1.initialize(3000);         // initialize timer1, and set a 1/2 second period
     // Timer1.pwm(9, 512);                // setup pwm on pin 9, 50% duty cycle
@@ -110,7 +111,7 @@ void loop() {
 
 void timer_ISR()
 {
-  accum0Pos += encoder0Pos;
+  // accum0Pos += encoder0Pos;
   speed = encoder0Pos*0.8333*60;
   encoder0Pos = 0;
   change = true;
@@ -175,6 +176,7 @@ void timer_ISR()
 void doEncoderA() {
   // look for a low-to-high on channel A
   encoder0Pos++;
+  Serial.println("HEreA");
   //Serial.println (encoder0Pos, DEC);
   // use for debugging - remember to comment out
 }
@@ -182,4 +184,5 @@ void doEncoderA() {
 void doEncoderB()
 {
   encoder0Pos++;
+  Serial.println("HEreB");
 }
