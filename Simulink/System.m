@@ -81,26 +81,26 @@ MD0_Linear_Gain = 0.8920*12/255;
 % Some values that will be used in the calculations of the mechanical dynamics
 
 % Mass of system (motors and ring)
-% --------------------------------------------
-% The values for the motors are given, so just the mass of the ring needs to be calculated.
-% Mass = volume*density
-% NEED TO CHANGE -> TODO
-rIn 	     = LinkR1/10^3;   			        % Inner radius of wrist frame, mm --> m
-rOut         = LinkR2/10^3;   			        % Outer radius of wrist frame, mm --> m
-wristDepth   = LinkD/10^3;	     		        % Depth of wrist frame, mm --> m
-distCentre   = LinkOff/10^3;                    % Distance from motor face to centre, mm --> m
-lengthQ0     = Q0(Length)/10^3;                 % Length of motor Q0, mm --> m
-lengthQ1     = Q1(Length)/10^3;                 % Length of motor Q1, mm --> m
-ringVol      = pi*(rOut^2-rIn^2)*wristDepth;    % Volume of the ring
-ringDensity  = RhoAl*10^3;				        % Density of 6061 Al, g/cm^3 --> kg/m^3: g/cm^3*(1kg/1000g)*(100^3cm^3/1m^3)=kg/m^3*10^3      
-mRing 	     = ringVol*ringDensity;             % Mass of ring = volume * density
-mQ0          = Q0(Weight)/10^3;                 % Mass of motor Q0
-mQ1          = Q1(Weight)/10^3;                 % Mass of motor Q1
-mTotal0       = 2*mQ1 + mRing;                  % Total mass of loads supported by motor Q0
-                                                % Q0 counterweight not included because it is supported by the bar
-                                                % Q1 counterweight included because it is supported by motor Q0 and it is assumed ot have the same mass as the motor
+% % --------------------------------------------
+% % The values for the motors are given, so just the mass of the ring needs to be calculated.
+% % Mass = volume*density
+% % NEED TO CHANGE -> TODO
+% rIn 	     = LinkR1/10^3;   			        % Inner radius of wrist frame, mm --> m
+% rOut         = LinkR2/10^3;   			        % Outer radius of wrist frame, mm --> m
+% wristDepth   = LinkD/10^3;	     		        % Depth of wrist frame, mm --> m
+% distCentre   = LinkOff/10^3;                    % Distance from motor face to centre, mm --> m
+% lengthQ0     = Q0(Length)/10^3;                 % Length of motor Q0, mm --> m
+% lengthQ1     = Q1(Length)/10^3;                 % Length of motor Q1, mm --> m
+% ringVol      = pi*(rOut^2-rIn^2)*wristDepth;    % Volume of the ring
+% ringDensity  = RhoAl*10^3;				        % Density of 6061 Al, g/cm^3 --> kg/m^3: g/cm^3*(1kg/1000g)*(100^3cm^3/1m^3)=kg/m^3*10^3      
+% mRing 	     = ringVol*ringDensity;             % Mass of ring = volume * density
+% mQ0          = Q0(Weight)/10^3;                 % Mass of motor Q0
+% mQ1          = Q1(Weight)/10^3;                 % Mass of motor Q1
+% mTotal0       = 2*mQ1 + mRing;                  % Total mass of loads supported by motor Q0
+%                                                 % Q0 counterweight not included because it is supported by the bar
+%                                                 % Q1 counterweight included because it is supported by motor Q0 and it is assumed ot have the same mass as the motor
 
-mTotal1 = shaftMassQ1;                          % Q1 total mass
+% mTotal1 = shaftMassQ1;                          % Q1 total mass
 
 xholderMass = 1/1000; %kg
 xholderDepth = 7/1000; 
@@ -160,7 +160,7 @@ BackEMF0 = 1/(Q0(SpdK)*RadPSecPerRPM);  % SpdK is the speed constant, rpm/v --> 
 % J: Moment of Inertia
 % --------------------------------------------
 
-J0Internal = ;                                             % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
+J0Internal = 0.5*massQ0*(shaftRadiusQ0^2 + rotorRadiusQ0^2);                                             % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
 J0EncoderQ0 = 1/2*encoderQ0Mass*encoderQ0Radius^2;
 
 % TODO: PULLEY

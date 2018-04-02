@@ -21,7 +21,7 @@ MotorParam = ...
  664.051        % SpdConst      (rpm/V)   % Values obtained through measurement
  0              % SpdTorqueGrad (rpm/mNm) % Not measured
  0              % MechTimeConst (ms)
- 39             % RotJ          (gcm^2)   % Values obtained through measurement
+ 0              % RotJ          (gcm^2)   % Values obtained through measurement
 ...
 ...             % Thermal Data
  0              % ThermRhous    (K/W)
