@@ -66,14 +66,20 @@ Q1Nom   = Q1(NomV);                % Nominal voltage
 % The amplifier dynamics will be the same for both the motors since they use the same amplifier circuitry
 
 % Volts
+Q1MaxVoltage = 12;
+Q0MaxVoltage = 7.49;
+
 MDSat1 = 10.8;
 InputSat1 = 12;
 
 MDSat0 = 10.8;
 InputSat1 = 12;
 
-MD1_Linear_Gain = 0.8920*12/255;
-MD0_Linear_Gain = 0.8920*12/255;
+MD1_Linear_Gain = 0.8920*Q1MaxVoltage/255;
+MD0_Linear_Gain = 0.8920*Q0MaxVoltage/255;
+
+
+
 
 %============================================%
 % 			 System Parameters               %
@@ -333,18 +339,17 @@ GM0 = E0*TConst0*M0;
 TM0 = feedback(GM0,BackEMF0);
 G0 = MD0_Linear_Gain*TM0;
 
-
-% Data = load('OL_EXPERIMENTAL.mat');
-% plot(Data.data_ol(:,0), Data.data_ol(:,2), 'r');
-% % hold on;
+Data = load('X_OL.mat');
+plot(Data.x_ol(:,1), Data.x_ol(:,2), 'r');
 % hold on;
-% step(G0);
-% title('Step Response of Y System Open Loop');
-% legend('Linear Motor Driver and Motor');
-% legend('Motor Raw', 'Simulink Model', 'Location','southwest');
-% ylabel('Response (Rad/s/PWM)'); % x-axis label
-% xlabel('Time(s)'); % y-axis label
-% hold off;
+hold on;
+step(G0);
+title('Step Response of X System Open Loop');
+legend('Linear Motor Driver and Motor');
+legend('Motor Raw', 'Simulink Model', 'Location','southwest');
+ylabel('Response (Rad/s/PWM)'); % x-axis label
+xlabel('Time(s)'); % y-axis label
+hold off;
 
 OL0 = zpk(G0*INT);
 
