@@ -12,20 +12,22 @@ const float sampleTime = 1000; // us
 const float scaleGains = 2*3.14159/400;
 const float scaleAngle = 400/(2*3.1459);
 
-const float KP_X = 200*scaleGains;
-const float KD_X = 15*scaleGains;
+const float KP_X = 150*scaleGains;
+const float KD_X = 30*scaleGains;
 const float N_X = 1;
-const float LASTD_MULT = 1/(1 + N*sampleTime);
-const float D_MULT = N/(1 + N*sampleTime);
+const float LASTD_MULT = 1/(1 + N_X*sampleTime);
+const float D_MULT = N_X/(1 + N_X*sampleTime);
 
 int posX;
-int desiredX = 1*scaleAngle;
+int desiredX = 45*3.1415/180*scaleAngle;
 int errorX;
 int last_errorX;
 float pX;
 float dX;
 float last_dX;
 float pidX;
+
+bool change = false;
 
 
 void setup() {
@@ -49,7 +51,7 @@ void setup() {
     DDRB = B00010010;
     DDRH = B01000000;
 
-    Timer1.initialize(3000);  // 3ms  // initialize timer1, and set a 1/2 second period
+    Timer1.initialize(1000);  // 3ms  // initialize timer1, and set a 1/2 second period
     Timer1.attachInterrupt(control);  // attaches callback() as a timer overflow interrupt
     
     analogWrite(enA, 0);              // Send PWM signal to L298N Enable pin
@@ -103,7 +105,7 @@ void loop () {
                 ((PINL & B10000000) >> 1) << 8 |
                 ((PINL & B00000010) << 6) << 8; 
 
-
+        Serial.print(posX);
         // Perform PID calculation
         errorX = desiredX - posX;
         pX = KP_X*errorX;
@@ -112,19 +114,28 @@ void loop () {
 
         last_dX = dX;
         last_errorX = errorX;
+        pidX = constrain(pidX, -255, 255);//constraining to appropriate value
+        pidX  = abs(pidX);//make sure it's a positive value
+
+        Serial.print("\t");
+        Serial.println(pidX);
 
         // Write values to motor
         analogWrite(enA, pidX); // TODO: optimize
 
         if (posX < desiredX)
         {
-            DDRH = B01000000; // in1 high
-            DDRB = B00000010; // in2 low
+            // DDRH = B01000000; // in1 high
+            // DDRB = B00000010; // in2 low
+            digitalWrite(in1, HIGH);
+            digitalWrite(in2, LOW); 
         }
         else
         {
-            DDRH = B00000000; // in1 LOW
-            DDRB = B00010010; // in2 HIGH
+            // DDRH = B00000000; // in1 LOW
+            // DDRB = B00010010; // in2 HIGH
+            digitalWrite(in1, LOW);
+            digitalWrite(in2, HIGH); 
         }
 
         change = false;
