@@ -12,7 +12,7 @@ const float sampleTime = 1000; // us
 const float scaleGains = 2*3.14159/400;
 const float scaleAngle = 400/(2*3.1459);
 
-const float KP_X = 150*scaleGains;
+const float KP_X = 180*scaleGains;
 const float KD_X = 30*scaleGains;
 const float N_X = 1;
 const float LASTD_MULT = 1/(1 + N_X*sampleTime);
@@ -48,7 +48,8 @@ void setup() {
     DDRL = B00011001;
     DDRG = B00000100;
     DDRD = B00000000;
-    DDRB = B00010010;
+
+    DDRB = B00010000;
     DDRH = B01000000;
 
     Timer1.initialize(1000);  // 3ms  // initialize timer1, and set a 1/2 second period
@@ -114,8 +115,17 @@ void loop () {
 
         last_dX = dX;
         last_errorX = errorX;
-        pidX = constrain(pidX, -255, 255);//constraining to appropriate value
-        pidX  = abs(pidX);//make sure it's a positive value
+        // Take absolute value of pidterm and constrain
+
+        if (pidX < 0)
+        {
+            pidX = -1*pidX;
+        }
+
+        if (pidX > 255)
+        {
+            pidX = 255;
+        }
 
         Serial.print("\t");
         Serial.println(pidX);
@@ -125,17 +135,17 @@ void loop () {
 
         if (posX < desiredX)
         {
-            // DDRH = B01000000; // in1 high
-            // DDRB = B00000010; // in2 low
-            digitalWrite(in1, HIGH);
-            digitalWrite(in2, LOW); 
+            PORTB = B00010000;
+            PORTH = B00000000; // in2 low
+            // digitalWrite(in1, HIGH);
+            // digitalWrite(in2, LOW); 
         }
         else
         {
-            // DDRH = B00000000; // in1 LOW
-            // DDRB = B00010010; // in2 HIGH
-            digitalWrite(in1, LOW);
-            digitalWrite(in2, HIGH); 
+            PORTB = B00000000;
+            PORTH = B01000000; // in2 HIGH
+            // digitalWrite(in1, LOW);
+            // digitalWrite(in2, HIGH); 
         }
 
         change = false;
