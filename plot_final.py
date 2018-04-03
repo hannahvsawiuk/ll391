@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import time
 import serial
 import csv
@@ -8,43 +9,44 @@ ser = serial.Serial(port='COM3', baudrate=57600, timeout=1 )
 line = ser.readline() # throw away any part lines
 while(ser.inWaiting() < 100): # make sure something is coming
   now = 0.0
-t=[] # initialize the data lists
-d1=[]
-d2=[]
-d3=[]
-d4=[]
-d5=[]
-d6=[]
+
+t         = [] # initialize the data lists
+desired   = []
+actual    = []
+error     = []
+
 while (ser.isOpen()):
-  # line = ser.read(4) # ead a line of text
-  line = ser.readline()
-  # print(line)
-  line = line.decode('ascii')
-  # print(line)
-  # line = line.strip("\n")
-  # print(line)
-  # bpm,sp02 = line.split(",")
-  line = line.strip()
-  mylist = line.split(",")
-  # print(bpm,sp02)
-  # print(line)
-  # print(mylist)
-  now = float(mylist[0])/1000 # time now in seconds
-  t.append(float(mylist[0])/1000) # from first element as milliseconds
-  d1.append(float(mylist[1])) # six data elements added to lists
-  # d2.append(float(mylist[2]))
-  # d3.append(float(mylist[3]))
-  # d4.append(float(mylist[4]))
-  # d5.append(float(mylist[5]))
-  # d6.append(float(mylist[6]))
+  line    = ser.readline()
+  line    = line.decode('ascii')
+  line    = line.strip()
+  mylist  = line.split(",")
+  now     = float(mylist[2])/1000 # time now in seconds
+
+  t.append(now)
+  desired.append(float(mylist[0])/100) 
+  actual.append(float(mylist[1])/100) 
+  error.append(abs((float(mylist[0]) - float(mylist[1]))/1000))
+
   if(ser.inWaiting() < 100): # redraw only if you are caught up
-    plt.clf() # clear the figure
-    plt.plot(t,d1) # plot a line for each set of data
-    # plt.plot(t,d2)
-    # plt.plot(t,d3)
-    # plt.plot(t,d4)
-    # plt.plot(t,d5)
-    # plt.plot(t,d6)
-    plt.axis([now-60,now,min(d1)-50,max(d1)+50])
-    plt.xlabel("Time Since Boot [s]")
+    # plt.clf() # clear the figure
+    
+    desLine, = plt.plot(t, desired, color='purple') # plot a line for each set of data
+    actLine, = plt.plot(t, actual, color='blue')
+    errLine, = plt.plot(t, error, color='green')
+
+    ymin = (min(desired) + min(actual))/2 
+    ymax = (max(desired) + max(actual))/2 
+    plt.axis([now-10,now+50,ymin-25,ymax+25])
+    plt.xlabel("Time [s]")
+
+    desPatch = mpatches.Patch(color='purple', label='Desired')
+    actPatch = mpatches.Patch(color='blue', label='Actual')
+    errPatch = mpatches.Patch(color='green', label='Error')
+    plt.legend(handles=[desPatch,actPatch,errPatch])
+
     plt.draw()
+    plt.pause(0.05)
+
+
+
+
