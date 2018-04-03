@@ -15,13 +15,13 @@ screenMaxY = 50;            % maximum positive y coordinate -> mm
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %    Mass and Radius     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-shaftRadiusQ1 = 0.0;       % radius of Q1 shaft -> m
-rotorRadiusQ1 = 0.0;       % radius of Q1 rotor -> m
+shaftRadiusQ1 = 0.0003;       % radius of Q1 shaft -> m
+rotorRadiusQ1 = 0.0025;       % radius of Q1 rotor -> m
 
 shaftRadiusQ0 = 0.00635;       % radius of Q0 shaft -> m
 rotorRadiusQ0 = 0.0035;       % radius of Q0 rotor -> m
 
-massQ1 = 0;
+massQ1 = 71.5*10^(-3);
 massQ0 = 220*10^(-3);      % mass of Q0 motor -> kg
 
 %%%%%%%%%%%%%%%%%%%%%%

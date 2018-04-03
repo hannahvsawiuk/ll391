@@ -4,11 +4,11 @@
 MotorParam = ...
 ...             % Nominal Values
 [0              % NomV          (V)*    % Not measured
- 1000           % NoLoadSpd     (rpm)   % Not measured
- 820            % NoLoadCurr    (mA)    % Values obtained through measurement
- 1354           % NomSpd        (rpm)   % Values obtained through measurement
+ 1100           % NoLoadSpd     (rpm)   % Not measured
+ 980            % NoLoadCurr    (mA)    % Values obtained through measurement
+ 2035           % NomSpd        (rpm)   % Values obtained through measurement
  0              % NomTorque     (mNm)   % Values obtained from SPEC SHEET
- 820            % NomCurr       (mA)    % Values obtained through measurement
+ 980            % NomCurr       (mA)    % Values obtained through measurement
  0              % StallTorque   (mNm)   % Not measured
  0              % StallCurr     (A)     % Not measured
  0              % MaxEff        (%)     % Not measured
@@ -21,7 +21,7 @@ MotorParam = ...
  664.051        % SpdConst      (rpm/V)   % Values obtained through measurement
  0              % SpdTorqueGrad (rpm/mNm) % Not measured
  0              % MechTimeConst (ms)
- 0              % RotJ          (gcm^2)   % Values obtained through measurement
+ 170              % RotJ          (gcm^2)   % Values obtained through measurement
 ...
 ...             % Thermal Data
  0              % ThermRhous    (K/W)

@@ -67,7 +67,7 @@ Q1Nom   = Q1(NomV);                % Nominal voltage
 
 % Volts
 Q1MaxVoltage = 12;
-Q0MaxVoltage = 7.49;
+Q0MaxVoltage = 10;
 
 MDSat1 = 10.8;
 InputSat1 = 12;
@@ -166,7 +166,8 @@ BackEMF0 = 1/(Q0(SpdK)*RadPSecPerRPM);  % SpdK is the speed constant, rpm/v --> 
 % J: Moment of Inertia
 % --------------------------------------------
 
-J0Internal = 0.5*massQ0*(shaftRadiusQ0^2 + rotorRadiusQ0^2);                                             % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
+% J0Internal = 0.5*massQ0*(shaftRadiusQ0^2 + rotorRadiusQ0^2); 
+J0Internal = Q0(RotJ)/10^7;                                            % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
 J0EncoderQ0 = 1/2*encoderQ0Mass*encoderQ0Radius^2;
 
 % TODO: PULLEY
@@ -203,8 +204,8 @@ Sens0    =  1;                                               % Arduino handles c
 % Weight = Weight of Q0 + Weight of Q1 + Weight of ring
 % Ns = Weight = Mass*g
 
-TotalWeight0  = mTotal0*G; 			                         % G is the gravitational acceleration given in CONSTANTS.m
-StFric0      = uSF*TotalWeight0/10^6;                         % Fs = us*Ns, units: N
+% TotalWeight0  = mTotal0*G; 			                         % G is the gravitational acceleration given in CONSTANTS.m
+% StFric0      = uSF*TotalWeight0/10^6;                         % Fs = us*Ns, units: N
 % --------------------------------------------
 
 %============================================%
@@ -233,10 +234,8 @@ BackEMF1 = 1/(Q1(SpdK)*RadPSecPerRPM); 		   	            % BackEMF Constant (V*s
 % The total moment of inertia associated with motor Q1 is J1 = J1Internal
 % J1Internal is given by just the rotational inertia of Q1, which is a given parameter
 % because the mass of the laser is negligible
-J1Internal = Q1(RotJ)/10^7;                                             % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
-% J1ShaftQ1 = (shaftMassQ1/12)*(3*(shaftRadiusQ1)^2 + shaftLengthQ1^2);   % Inertia for Q1 shaft
-% J1 = J1Internal + J1ShaftQ1;			                                  % Total Inertia for motor Q1, units: Nms^2/rad
-% J1EncoderQ1 = encoderQ1Mass/12*(3*encoderQ1Radius^3 + encoderQ1Height^2); % Inertia for Q1 encoder
+J1Internal = Q1(RotJ)/10^7;   
+% J1Internal = 0.5*massQ1*(shaftRadiusQ1^2 + rotorRadiusQ1^2);                                          % gcm^2 --> kgm^2: gcm^2*(1kg/1000 g)*(1m^2/100^2cm^2)=kgm^2/10^7
 J1EncoderQ1 = 1/2*encoderQ1Mass*encoderQ1Radius^2;
 J1LaserHolder = 1/2*xholderMass*(xholderDepth^2 + xholderHeight^2);
 J1Laser = 1/12*laserMass*(3*laserRadius^2 + laserHeight^2);
