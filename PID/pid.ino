@@ -12,14 +12,14 @@ const float sampleTime = 1000; // us
 const float scaleGains = 2*3.14159/400;
 const float scaleAngle = 400/(2*3.1459);
 
-const float KP_X = 180*scaleGains;
+const float KP_X = 200*scaleGains;
 const float KD_X = 30*scaleGains;
 const float N_X = 1;
 const float LASTD_MULT = 1/(1 + N_X*sampleTime);
 const float D_MULT = N_X/(1 + N_X*sampleTime);
 
 int posX;
-int desiredX = 45*3.1415/180*scaleAngle;
+int desiredX = 45.1415/180*scaleAngle;
 int errorX;
 int last_errorX;
 float pX;
