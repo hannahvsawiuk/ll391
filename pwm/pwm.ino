@@ -1,13 +1,14 @@
 
 
-pinMode(12, OUTPUT);
-  pinMode(11, OUTPUT);
+  // pinMode(12, OUTPUT);
+  // pinMode(11, OUTPUT);
 
-  TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS20);
+  // TCCR4A = _BV(COM4A1) | _BV(COM4B1) | _BV(WGM41) | _BV(WGM40);
+  // TCCR4B = _BV(CS40);
   
-  OCR2A = 200;
-  OCR2B = 120;
+  // OCR2A = 50;
+  // OCR2B = 120;
+  // OCR2C = 200;
 
 //Pinouts for Each Timer
 //timer 0 (controls pin 13, 4) (timer 0 is special)
@@ -16,8 +17,10 @@ pinMode(12, OUTPUT);
 //timer 3 (controls pin 5, 3, 2)
 //timer 4 (controls pin 8, 7, 6)
 
+
+
+
 //TCCRnA --> n is your timer number
-12:24AM
 //Autonomous Motor Control
 
 #define enA 11
@@ -63,12 +66,20 @@ void setup() {
 
   pinMode(12, OUTPUT);
   pinMode(11, OUTPUT);
+  pinMode(8, OUTPUT);
 
-  TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS20);
   
-  OCR2A = 200;
-  OCR2B = 120;
+  TCCR4B = TCCR4B & ~7;   // this operation (AND plus NOT),  set the three bits in TCCR2B to 0
+  // int myPrescaler = 2;         // this could be a number in [1 , 6]. In this case, 3 corresponds in binary to 011.   
+  TCCR4B = TCCR4B | 5;  //this operation (OR), replaces the last three bits in TCCR2B with our new value 011
+  OCR4A = 150;
+  OCR4B = 200;
+  OCR4C = 250;
+  // TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
+  // TCCR2B = _BV(CS20);
+  
+  // OCR2A = 200;
+  // OCR2B = 120;
 
 //Pinouts for Each Timer
 //timer 0 (controls pin 13, 4) (timer 0 is special)

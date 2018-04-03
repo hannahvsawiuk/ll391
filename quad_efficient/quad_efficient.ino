@@ -126,7 +126,7 @@ void qd1()
           ((PINL & B00000010) << 6) << 8; 
     
         // Serial.print("\t");
-    // Serial.println(pos);
+    // Seria                                                                                                                                  l.println(pos);
     // speed = pos*0.8333*60;
     change = true;
     // PORTB = B00000010;
