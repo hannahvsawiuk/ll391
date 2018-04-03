@@ -15,7 +15,7 @@
 % ----------------------
  X_MOTOR;                % Default Maxon motor
  Q0 = MotorParam;
- DCMOTOR;
+ Y_MOTOR;
  Q1 = MotorParam;
 
 %============================================%

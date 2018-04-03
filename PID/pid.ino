@@ -12,8 +12,8 @@ const float sampleTime = 1000; // us
 const float scaleGains = 2*3.14159/400;
 const float scaleAngle = 400/(2*3.1459);
 
-const float KP_X = 1*scaleGains;
-const float KD_X = 1*scaleGains;
+const float KP_X = 200*scaleGains;
+const float KD_X = 15*scaleGains;
 const float N_X = 1;
 const float LASTD_MULT = 1/(1 + N*sampleTime);
 const float D_MULT = N/(1 + N*sampleTime);

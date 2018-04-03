@@ -69,12 +69,13 @@ void setup() {
   pinMode(8, OUTPUT);
 
   
-  TCCR4B = TCCR4B & ~7;   // this operation (AND plus NOT),  set the three bits in TCCR2B to 0
-  // int myPrescaler = 2;         // this could be a number in [1 , 6]. In this case, 3 corresponds in binary to 011.   
-  TCCR4B = TCCR4B | 5;  //this operation (OR), replaces the last three bits in TCCR2B with our new value 011
-  OCR4A = 150;
-  OCR4B = 200;
-  OCR4C = 250;
+  // TCCR4B = TCCR4B & ~7;   // this operation (AND plus NOT),  set the three bits in TCCR2B to 0
+  // // int myPrescaler = 2;         // this could be a number in [1 , 6]. In this case, 3 corresponds in binary to 011.   
+  // TCCR4B = TCCR4B | 5;  //this operation (OR), replaces the last three bits in TCCR2B with our new value 011
+  // OCR4A = 150;
+  // OCR4B = 200;
+  // OCR4C = 250;
+  analogWrite(8, 125);
   // TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
   // TCCR2B = _BV(CS20);
   
