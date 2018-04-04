@@ -50,7 +50,7 @@ void loop() {
     // int pwmIn = 100; // speed of 3234 RPM
 
     // pwmOutput = map(pwmIn, 0, 100, 0, 255);
-    analogWrite(enA, 100); // Send PWM signal to L298N Enable pin
+    analogWrite(enA, 255); // Send PWM signal to L298N Enable pin
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW); 
     Serial.println("Turning");
