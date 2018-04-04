@@ -7,25 +7,42 @@
 #define in1 9
 #define in2 10
 
-const float sampleTime = 1000; // us
+const float sampleTime = 200*10^(-6); // us
 
 const float scaleGains = 2*3.14159/400;
 const float scaleAngle = 400/(2*3.1459);
 
-const float KP__X = 200*scaleGains;
-const float KD__X = 10*scaleGains;
+// const float K_U =281*scaleGains;
+// const float KP_X = K_U*8.417;
+// const float KD_X = K_U;
+
+// const float K_U =20*scaleGains;
+// const float KP_X = K_U*8.417;
+// const float KD_X = K_U;
+
+// const float K_U =20*scaleGains;
+// const float KP_X = K_U*20;
+// const float KD_X = K_U;
+
+// const float KP_X = 2365.177*scaleGains;
+// const float KD_X = 281*scaleGains;
+
+const float KP_X = 230*scaleGains;
+const float KD_X = 20*scaleGains;
+
+
 const float N_X = 100;
 const float LASTD_MULT = 1/(1 + N_X*sampleTime);
 const float D_MULT = N_X/(1 + N_X*sampleTime);
 
-int pos_X;
-int desired_X = 45.1415/180*scaleAngle;
-int error_X;
-int last_error_X;
-float p_X;
-float d_X;
-float last_d_X;
-float pid_X;
+int pos_X = 0;
+int desired_X  = 45*3.1415/180*scaleAngle;
+int error_X = 0;
+int last_error_X = desired_X - pos_X;
+float p_X = 0;
+float d_X = 0;
+float last_d_X = 0;
+float pid_X = 0;
 
 bool change = false;
 
@@ -38,11 +55,15 @@ void setup() {
 
     pinMode(oePin, OUTPUT);
     pinMode(reset, OUTPUT);
+    pinMode(in1, OUTPUT);
+    pinMode(in2, OUTPUT);
+    pinMode(enA, OUTPUT);
 
     digitalWrite(oePin, LOW);
     digitalWrite(reset, LOW);
     delay(100);
     digitalWrite(reset, HIGH);
+    delay(200);
 
     // Add homing function
 
@@ -76,7 +97,7 @@ void setup() {
     TCCR1B = 0;// same for TCCR1B
     TCNT1  = 0;//initialize counter value to 0
     // set compare match register for 1hz increments
-    OCR1A = 1599;// = 6*10^6/(2000*1)) -1 (must be <65536)
+    OCR1A = 1199;// = 6*10^6/(2000*1)) -1 (must be <65536)
     // turn on CTC mode
     TCCR1B |= (1 << WGM12);
     // Set CS10 and CS12 bits for 1024 prescaler
@@ -86,9 +107,9 @@ void setup() {
     Serial.println(desired_X);
 
 
-    analogWrite(enA, 0);              // Send PWM signal to L298N Enable pin
-    digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW); 
+    // analogWrite(enA, 0);              // Send PWM signal to L298N Enable pin
+    // digitalWrite(in1, HIGH);
+    // digitalWrite(in2, LOW); 
 
     interrupts();
 
@@ -142,11 +163,13 @@ void loop () {
         // Serial.print(pos_X);
         // Perform PID calculation
         error_X = desired_X - pos_X;
-        p_X = KP__X*error_X;
-        d_X = LASTD_MULT*last_d_X + KD__X*D_MULT*(error_X - last_error_X);
+        p_X = KP_X*error_X;
+        d_X = LASTD_MULT*last_d_X + KD_X*D_MULT*(error_X - last_error_X);
+        // d_X = LASTD_MULT*last_d_X + KD_X*D_MULT*(pos_X - last_pos_X);
         pid_X = p_X + d_X;
 
         last_d_X = d_X;
+        //last_pos_X=pos_X;
         last_error_X = error_X;
         // Take absolute value of pidterm and constrain
 
@@ -161,12 +184,12 @@ void loop () {
         }
 
         // Serial.print("\t");
-        Serial.println(pid_X);
+        //Serial.println(pid_X);
 
         // Write values to motor
         analogWrite(enA, pid_X); // TODO: optimize
 
-        if (error_X <= 1 || error_X >= -1)
+        if ((error_X <= 1) && (error_X >= -1))
         {
             PORTB = B00000000;
             PORTH = B00000000; // in2 low
