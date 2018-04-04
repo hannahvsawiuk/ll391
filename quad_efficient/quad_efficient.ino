@@ -1,21 +1,10 @@
 #include <TimerOne.h>   
-#define oePin  46 //active low
-#define dirPin 47
-//#define indexPin 2
-#define reset 49
-#define sel1Pin  45
-#define sel2Pin  39
-#define daPin0   44
-#define daPin1   36
-#define daPin2  37
-#define daPin3   38
-#define daPin4   40
-#define daPin5   41
-#define daPin6   42
-#define daPin7   48
-#define enA 8
-#define in1 9
-#define in2 10
+#define oePin1  46 
+#define reset1 49
+
+#define oePin2 32
+#define reset2 35
+
 
 // byte encoderPos;
 int encoder0Pos = 0;
@@ -35,30 +24,37 @@ void setup() {
 //   pinMode(sel1Pin, OUTPUT);//encoder pins
 //   pinMode(sel2Pin, OUTPUT);//encoder pins
   
-  pinMode(oePin, OUTPUT);
+  pinMode(oePin1, OUTPUT);
 
-  pinMode(reset, OUTPUT);
+  pinMode(reset1, OUTPUT);
 
-  digitalWrite(sel1Pin, HIGH);
-  digitalWrite(sel2Pin, LOW); //reads lowest 
-  digitalWrite(oePin, LOW);
-
-  digitalWrite(reset, LOW);
+  digitalWrite(reset1, LOW);
   delay(100);
-  digitalWrite(reset, HIGH);
-  
+  digitalWrite(reset1, HIGH);
+
+    pinMode(oePin2, OUTPUT);
+
+  pinMode(reset2, OUTPUT);
+
+  digitalWrite(reset2, LOW);
+  delay(100);
+  digitalWrite(reset2, HIGH);
+    
+    
+    // qd1
     DDRC = B01100100;
     DDRL = B00011001;
     DDRG = B00000100;
     DDRD = B00000000;
-    DDRB = B00000010;
+    
+    //qd2
+    DDRA = B00001000;
+    
 
     Timer1.initialize(3000);  // 3ms          // initialize timer1, and set a 1/2 second period
-    Timer1.attachInterrupt(qd1);  // attaches callback() as a timer overflow interrupt
-    analogWrite(enA, 255); // Send PWM signal to L298N Enable pin
-    digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW); 
-  
+    // Timer1.attachInterrupt(qd1);  // attaches callback() as a timer overflow interrupt
+     Timer1.attachInterrupt(qd2);  // attaches callback() as a timer overflow interrupt
+ 
 }
 
 void loop () {
@@ -137,5 +133,55 @@ void qd1()
 
 }
 
+void qd2()
+{
+    pos = 0;
 
+    // set SEL1 HIGH and SEL2 LOW
+    // RESET is always high
+    PORTC = B01000100;
+    PORTG = B00000000;
+
+    // write lower bits to pos
+
+    pos = (PINC & B10000000) >> 7 |
+          (PINA & B00000001) << 1 |
+          (PINA & B00000010) << 1 |
+          (PINA & B00000100) << 1 |
+          (PINA & B00010000)      |
+          (PINA & B00100000)      |
+          (PINA & B01000000)      |
+          (PINC & B00001000) << 4; 
+    
+    // long unsigned end = micros();
+    // Serial.print(end - start);
+
+        // set SEL1 LOW and SEL2 LOW
+        // RESET is always high
+    PORTC = B00000100;
+    PORTG = B00000000;
+
+    // write higher bits to pos
+
+    pos = pos |
+          ((PINC & B10000000) >> 7) << 8 |
+          ((PINA & B00000001) << 1) << 8 |
+          ((PINA & B00000010) << 1) << 8 |
+          ((PINA & B00000100) << 1) << 8 |
+          ((PINA & B00010000)     ) << 8 |
+          ((PINA & B00100000)     ) << 8 |
+          ((PINA & B01000000)     ) << 8 |
+          ((PINC & B00001000) << 4) << 8; 
+    
+        // Serial.print("\t");
+    // Seria                                                                                                                                  l.println(pos);
+    // speed = pos*0.8333*60;
+    change = true;
+    // PORTB = B00000010;
+    // PORTB = B00000000;
+    // Serial.println(pos);
+
+    // Serial.print("\t");
+
+}
 
