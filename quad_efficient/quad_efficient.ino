@@ -6,6 +6,11 @@
 #define reset2 35
 
 
+#define enA 8
+#define in1 9
+#define in2 10
+
+
 // byte encoderPos;
 int encoder0Pos = 0;
 
@@ -50,7 +55,12 @@ void setup() {
     //qd2
     DDRA = B00001000;
     
-
+ pinMode(enA, OUTPUT);
+    pinMode(in1, OUTPUT);
+    pinMode(in2, OUTPUT);
+ analogWrite(enA, 255); // Send PWM signal to L298N Enable pin
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH); 
     Timer1.initialize(3000);  // 3ms          // initialize timer1, and set a 1/2 second period
     // Timer1.attachInterrupt(qd1);  // attaches callback() as a timer overflow interrupt
      Timer1.attachInterrupt(qd2);  // attaches callback() as a timer overflow interrupt

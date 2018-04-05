@@ -20,7 +20,7 @@ int pressed = false;
 volatile signed int encoder0Pos = 0;
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     Serial.println("Setting up pins");
     pinMode(enA, OUTPUT);
     pinMode(in1, OUTPUT);
@@ -50,14 +50,20 @@ void loop() {
     // int pwmIn = 100; // speed of 3234 RPM
 
     // pwmOutput = map(pwmIn, 0, 100, 0, 255);
-    analogWrite(enA, 255); // Send PWM signal to L298N Enable pin
-    digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW); 
+    analogWrite(enA, 125); // Send PWM signal to L298N Enable pin
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH); 
     Serial.println("Turning");
+    // for (int i = 75; i < 120; i += 1)
+    // {
+    //   analogWrite(enA, i);
+    //   Serial.println(i);
+    //   delay(500);
+    // }
 
-    analogWrite(enB, 255); // Send PWM signal to L298N Enable pin
-    digitalWrite(in1_B, HIGH);
-    digitalWrite(in2_B, LOW); 
+    // analogWrite(enB, 255); // Send PWM signal to L298N Enable pin
+    // digitalWrite(in1_B, HIGH);
+    // digitalWrite(in2_B, LOW); 
   //  Serial.println("Sent PWM Signal");
   //  Serial.println(encoder0Pos);
    
